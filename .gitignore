@@ -1,0 +1,5 @@
+
+.snakemake/
+.fonts_registered.txt
+figures/
+*.*.swp

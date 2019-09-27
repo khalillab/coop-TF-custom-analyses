@@ -1,0 +1,16 @@
+---
+
+fonts_path: fonts/
+
+rnaseq:
+    fdr: 0.1
+    high-affinity: ../rnaseq/diff_exp/verified_genes_plus_Venus/high-affinity-ZF-v-reporter-only/libsizenorm/high-affinity-ZF-v-reporter-only_rnaseq-libsizenorm-verified_genes_plus_Venus-diffexp-results-all.tsv
+    low-affinity: ../rnaseq/diff_exp/verified_genes_plus_Venus/low-affinity-ZF-v-reporter-only/libsizenorm/low-affinity-ZF-v-reporter-only_rnaseq-libsizenorm-verified_genes_plus_Venus-diffexp-results-all.tsv
+    low-affinity-w-clamp: ../rnaseq/diff_exp/verified_genes_plus_Venus/low-affinity-ZF-with-clamp-v-reporter-only/libsizenorm/low-affinity-ZF-with-clamp-v-reporter-only_rnaseq-libsizenorm-verified_genes_plus_Venus-diffexp-results-all.tsv
+
+chipseq_coverage:
+    coverage: ../chipseq-3/datavis/affinity-dependent-peaks/libsizenorm/affinity-dependent-peaks-allsamples-allannotations-ZF-chipseq-libsizenorm-protection-input-subtracted.tsv.gz
+    peak_annotation: ../chipseq-3/diff_binding/ZF-cumulative-peaklist/low-affinity-ZF-v-high-affinity-ZF/libsizenorm/low-affinity-ZF-v-high-affinity-ZF_ZF-chipseq-libsizenorm-ZF-cumulative-peaklist-diffbind-results-down-summits.bed
+    transcripts: ../genome/annotations/Scer_transcripts_w_verifiedORFs-withVenus-URA3_reporter_strain.bed
+    orfs: ../genome/annotations/Scer_nondubious_ORFs-withVenus-URA3_reporter_strain.bed
+

@@ -1,0 +1,8 @@
+name: plot
+channels:
+    - conda-forge
+dependencies:
+    - r-tidyverse=1.2.1
+    - r-cairo=1.5_10
+    - r-extrafont=0.17
+

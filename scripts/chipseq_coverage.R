@@ -1,0 +1,215 @@
+library(tidyverse)
+
+main = function(input_coverage,
+                input_summit_annotation,
+                input_transcript_annotation,
+                input_orf_annotation,
+                output_path){
+    df = read_tsv(input_coverage,
+                  col_names=c("group",
+                              "sample",
+                              "type",
+                              "annotation",
+                              "index",
+                              "position",
+                              "signal")) %>%
+        group_by(group,
+                 annotation,
+                 index,
+                 position) %>%
+        summarize(signal=mean(signal)) %>%
+        ungroup() %>%
+        mutate(signal=scales::rescale(signal)) %>%
+        spread(key=group,
+               value=signal) %>%
+        mutate_at(c("high-affinity-ZF",
+                    "low-affinity-ZF",
+                    "low-affinity-ZF-with-clamp"),
+                  # ~(./(`reporter-only`+0.01))) %>%
+                  ~(.-`reporter-only`)) %>%
+        select(-`reporter-only`) %>%
+        gather(key=group,
+               value=signal,
+               -c(annotation,
+                  index,
+                  position)) %>%
+        mutate(group=ordered(group,
+                             levels=c("high-affinity-ZF",
+                                      "low-affinity-ZF",
+                                      "low-affinity-ZF-with-clamp"),
+                             labels=c("high-affinity ZF",
+                                      "low-affinity ZF",
+                                      "low-affinity ZF\nwith clamp")))
+
+    annotations = read_tsv(input_summit_annotation,
+                           col_names=c("chrom",
+                                       "summit_start",
+                                       "summit_end",
+                                       "summit_name",
+                                       "score",
+                                       "strand")) %>%
+        select(-c(score,
+                  strand)) %>%
+        rowid_to_column("index") %>%
+        left_join(read_tsv(input_transcript_annotation,
+                           col_names=c("chrom",
+                                       "transcript_left",
+                                       "transcript_right",
+                                       "transcript_name",
+                                       "score",
+                                       "strand")) %>%
+                      select(-score),
+                  by="chrom") %>%
+        filter((transcript_left >= (summit_start - 1010) & transcript_left <= (summit_end + 1010)) |
+                   (transcript_right >= (summit_start - 1010) & transcript_right <= (summit_end + 1010)) |
+                   (transcript_left <= (summit_start - 1010) & transcript_right >= (summit_end + 1010))) %>%
+        left_join(read_tsv(input_orf_annotation,
+                           col_names=c("chrom",
+                                       "orf_left",
+                                       "orf_right",
+                                       "transcript_name",
+                                       "score",
+                                       "strand")) %>%
+                      select(-score),
+                 by=c("chrom",
+                      "transcript_name",
+                      "strand")) %>%
+        mutate(transcript_start = ifelse(strand=="+",
+                                         transcript_left,
+                                         transcript_right),
+               transcript_end = ifelse(strand=="+",
+                                       transcript_right,
+                                       transcript_left),
+               notch = ifelse(strand=="+",
+                              (orf_right - orf_left) * 0.85 + orf_left,
+                              orf_right - (orf_right - orf_left) * 0.85),
+               orf_start = ifelse(strand=="+",
+                                  orf_left,
+                                  orf_right),
+               orf_end = ifelse(strand=="+",
+                                orf_right,
+                                orf_left)) %>%
+        select(-c(transcript_left,
+                  transcript_right,
+                  orf_left,
+                  orf_right,
+                  strand)) %>%
+        mutate_at(c("transcript_start",
+                    "transcript_end",
+                    "orf_start",
+                    "orf_end",
+                    "notch"),
+                  ~((. - summit_start) / 1000)) %>%
+        mutate(label_position = (orf_start + orf_end)/2) %>%
+        expand(nesting(index,
+                       transcript_name,
+                       transcript_start,
+                       transcript_end,
+                       orf_start,
+                       notch,
+                       orf_end,
+                       label_position),
+               orf_y=c(-1, 1)) %>%
+        gather(key=type,
+               value=orf_x,
+               c(orf_start,
+                 notch,
+                 orf_end)) %>%
+        mutate(orf_y = ifelse(type=="orf_end",
+                              0,
+                              orf_y)) %>%
+        distinct() %>%
+        group_by(index,
+                 transcript_name) %>%
+        arrange(type,
+                orf_y,
+                .by_group=TRUE) %>%
+        mutate(order = c(4,2,3,5,1)) %>%
+        arrange(order,
+                .by_group=TRUE) %>%
+        left_join(df %>%
+                      group_by(index) %>%
+                      summarize(ymin=min(signal),
+                                range=max(signal)-min(signal)) %>%
+                      mutate(ymin=ymin-0.1*range),
+                  by="index")
+
+    plot = ggplot() +
+        geom_segment(data = annotations %>%
+                         distinct(transcript_name, .keep_all=TRUE),
+                     aes(y=ymin,
+                         yend=ymin,
+                         x=pmax(-1.01, pmin(1.01, transcript_start)),
+                         xend=pmax(-1.01, pmin(1.01, transcript_end))),
+                     color="grey50") +
+        geom_polygon(data = annotations,
+                     aes(x=pmax(-1.01, pmin(1.01, orf_x)),
+                         y=orf_y * 0.07 * range + ymin,
+                         group=transcript_name),
+                     fill="grey80") +
+        geom_text(data = annotations %>%
+                      filter((range(pmax(-1.01, pmin(1.01, orf_x)))[2] -
+                                  range(pmax(-1.01, pmin(1.01, orf_x)))[1]) > 0.4) %>%
+                      distinct(transcript_name, .keep_all=TRUE) %>%
+                      filter(between(label_position, -1.01, 1.01)),
+                  aes(x=label_position,
+                      y=ymin,
+                      label=transcript_name),
+                  size=8/72*25.4,
+                  fontface="italic",
+                  family="FreeSans") +
+        geom_line(data = df,
+                  aes(x=position,
+                      y=signal,
+                      color=group),
+                  size=1,
+                  alpha=0.8,
+                  position=position_identity()) +
+        facet_wrap(~index,
+                   scales="free_y") +
+                   # scales="fixed") +
+        scale_color_viridis_d(end=0.85,
+                              name="relative ChIP enrichment:",
+                              guide=guide_legend(label.position="top",
+                                                 label.vjust=0.5,
+                                                 title.vjust=0.8,
+                                                 override.aes=list(size=2))) +
+        scale_x_continuous(expand=c(0,0),
+                           breaks=scales::pretty_breaks(n=2),
+                           labels=function(x) case_when(x==0 ~ "peak summit",
+                                                        x==1 ~ paste(x, "kb"),
+                                                        TRUE ~ as.character(x)),
+                           name=NULL) +
+        scale_y_continuous(breaks=scales::pretty_breaks(n=3),
+                           limits=c(NA, NA),
+                           name=NULL) +
+        theme_light() +
+        theme(text=element_text(color="black", size=8, family="FreeSans"),
+              axis.text=element_text(color="black"),
+              axis.text.y=element_text(size=4,
+                                       margin=margin(r=0.5, unit="pt")),
+              strip.text=element_blank(),
+              panel.grid=element_blank(),
+              panel.spacing.x=unit(1, "pt"),
+              panel.spacing.y=unit(1, "pt"),
+              legend.position="top",
+              legend.direction="horizontal",
+              legend.spacing.y=unit(0, "pt"),
+              legend.text=element_text(margin=margin(b=-5, unit="pt")),
+              legend.margin=margin(b=-11, unit="pt"),
+              axis.title.y=element_text(angle=0, vjust=0.5))
+
+    ggsave(output_path,
+           plot=plot,
+           width=16,
+           height=9,
+           units="cm",
+           device=cairo_pdf)
+}
+
+main(input_coverage=snakemake@input[["coverage"]],
+     input_summit_annotation=snakemake@input[["summit_annotation"]],
+     input_transcript_annotation=snakemake@input[["transcript_annotation"]],
+     input_orf_annotation=snakemake@input[["orf_annotation"]],
+     output_path=snakemake@output[["coverage"]])
+
