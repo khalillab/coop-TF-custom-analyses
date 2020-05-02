@@ -1,4 +1,4 @@
-name: custom_figures
+name: ggforce
 channels:
     - conda-forge
 dependencies:
@@ -12,3 +12,4 @@ dependencies:
     - r-hexbin=1.28.1
     - r-ggally=1.4.0
     - r-ks=1.11.6
+    - r-ggforce=0.3.1

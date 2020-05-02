@@ -1,6 +1,7 @@
 ---
 
 fonts_path: fonts/
+theme_path: scripts/custom_theme.R
 
 rnaseq:
     fdr: 0.1
@@ -9,8 +10,24 @@ rnaseq:
     low-affinity-w-clamp: ../rnaseq/diff_exp/verified_genes_plus_Venus/low-affinity-ZF-with-clamp-v-reporter-only/libsizenorm/low-affinity-ZF-with-clamp-v-reporter-only_rnaseq-libsizenorm-verified_genes_plus_Venus-diffexp-results-all.tsv
 
 chipseq_coverage:
-    coverage: ../chipseq-3/datavis/affinity-dependent-peaks/libsizenorm/affinity-dependent-peaks-allsamples-allannotations-ZF-chipseq-libsizenorm-protection-input-subtracted.tsv.gz
-    peak_annotation: ../chipseq-3/diff_binding/ZF-cumulative-peaklist/low-affinity-ZF-v-high-affinity-ZF/libsizenorm/low-affinity-ZF-v-high-affinity-ZF_ZF-chipseq-libsizenorm-ZF-cumulative-peaklist-diffbind-results-down-summits.bed
+    coverage: ../chipseq-3/datavis/affinity-dependent-peaks/libsizenorm/affinity-dependent-peaks-allsamples-allannotations-ZF-chipseq-libsizenorm-ratio.tsv.gz
+    peak_annotation: ../chipseq-3/datavis/affinity-dependent-peaks/libsizenorm/all-v-all/passing/ratio/peaks_cluster-1.bed
     transcripts: ../genome/annotations/Scer_transcripts_w_verifiedORFs-withVenus-URA3_reporter_strain.bed
     orfs: ../genome/annotations/Scer_nondubious_ORFs-withVenus-URA3_reporter_strain.bed
 
+zf_venus_reporter_datavis:
+    target_annotation: ../zf_data_integration/browser-shots/Venus/Venus.bed
+    transcript_annotation: ../genome/annotations/Scer_transcripts_w_verifiedORFs-withVenus-URA3_reporter_strain.bed
+    orf_annotation: ../genome/annotations/Scer_nondubious_ORFs-withVenus-URA3_reporter_strain.bed
+    motif_annotation: ../genome/annotations/42-10_9bp_fimo_7e4.bed
+    data: ../zf_data_integration/browser-shots/Venus/Venus_all-assays.tsv.gz
+
+rnaseq_summary:
+    rnaseq_fdr: 0.1
+    motif_results: ../zf_motif_enrichment/comparisons/high-affinity-upregulated-transcripts-v-all-transcripts/high-affinity-upregulated-transcripts-v-all-transcripts_control_unmergedFIMOresults.tsv.gz
+    high-affinity: ../rnaseq/diff_exp/verified_genes_plus_Venus/high-affinity-ZF-v-reporter-only/libsizenorm/high-affinity-ZF-v-reporter-only_rnaseq-libsizenorm-verified_genes_plus_Venus-diffexp-results-all.tsv
+    low-affinity: ../rnaseq/diff_exp/verified_genes_plus_Venus/low-affinity-ZF-v-reporter-only/libsizenorm/low-affinity-ZF-v-reporter-only_rnaseq-libsizenorm-verified_genes_plus_Venus-diffexp-results-all.tsv
+    low-affinity-w-clamp: ../rnaseq/diff_exp/verified_genes_plus_Venus/low-affinity-ZF-with-clamp-v-reporter-only/libsizenorm/low-affinity-ZF-with-clamp-v-reporter-only_rnaseq-libsizenorm-verified_genes_plus_Venus-diffexp-results-all.tsv
+
+zf_chipseq_global_coverage:
+    data: ../chipseq-3/qual_ctrl/scatter_plots/ZF_chipseq_union-bedgraph-libsizenorm-midpoint-window-500-allsamples.tsv.gz

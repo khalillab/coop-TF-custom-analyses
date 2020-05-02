@@ -19,7 +19,7 @@ main = function(input_coverage,
                  position) %>%
         summarize(signal=mean(signal)) %>%
         ungroup() %>%
-        mutate(signal=scales::rescale(signal)) %>%
+        # mutate(signal=scales::rescale(signal)) %>%
         spread(key=group,
                value=signal) %>%
         mutate_at(c("high-affinity-ZF",
@@ -157,7 +157,8 @@ main = function(input_coverage,
                       label=transcript_name),
                   size=8/72*25.4,
                   fontface="italic",
-                  family="FreeSans") +
+                  family="FreeSans",
+                  vjust=0.6) +
         geom_line(data = df,
                   aes(x=position,
                       y=signal,
@@ -182,6 +183,7 @@ main = function(input_coverage,
                            name=NULL) +
         scale_y_continuous(breaks=scales::pretty_breaks(n=3),
                            limits=c(NA, NA),
+                           # limits=c(NA, 0.4),
                            name=NULL) +
         theme_light() +
         theme(text=element_text(color="black", size=8, family="FreeSans"),
