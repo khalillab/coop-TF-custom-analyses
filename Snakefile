@@ -12,6 +12,7 @@ rule target:
         "figures/rnaseq_summary_alternate/rnaseq_summary_scatter_highlight_motifs.pdf",
         "figures/zf_chipseq_global_coverage/zf_chipseq_global_coverage.pdf",
         "figures/expression_vs_chip_enrichment/expression_vs_chip_enrichment.pdf",
+        "figures/motif_distance_vs_rnaseq/motif_distance_vs_rnaseq.pdf",
 
 rule register_fonts:
     input:
@@ -134,6 +135,20 @@ rule expression_vs_chip_enrichment:
         "envs/plot.yaml"
     script:
         "scripts/expression_vs_chip_enrichment.R"
+
+rule motif_distance_vs_rnaseq:
+    input:
+        theme = config["theme_path"],
+        fonts = ".fonts_registered.txt",
+        rnaseq = config["motif_distance_vs_rnaseq"]["rnaseq"],
+        motifs = config["motif_distance_vs_rnaseq"]["motifs"],
+    output:
+        pdf = "figures/motif_distance_vs_rnaseq/motif_distance_vs_rnaseq.pdf",
+    conda:
+        "envs/plot.yaml"
+    script:
+        "scripts/motif_distance_vs_rnaseq.R"
+
 
 
 
