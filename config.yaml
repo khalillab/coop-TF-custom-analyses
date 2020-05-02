@@ -31,3 +31,12 @@ rnaseq_summary:
 
 zf_chipseq_global_coverage:
     data: ../chipseq-3/qual_ctrl/scatter_plots/ZF_chipseq_union-bedgraph-libsizenorm-midpoint-window-500-allsamples.tsv.gz
+
+expression_vs_chip_enrichment:
+    high_rna: ../rnaseq/diff_exp/verified_genes_plus_Venus/high-affinity-ZF-v-reporter-only/libsizenorm/high-affinity-ZF-v-reporter-only_rnaseq-libsizenorm-verified_genes_plus_Venus-diffexp-results-all.tsv
+    high_chip: ../chipseq-3/diff_binding/verified_genes_plus_Venus/high-affinity-ZF-v-reporter-only/libsizenorm/high-affinity-ZF-v-reporter-only_ZF-chipseq-libsizenorm-verified_genes_plus_Venus-diffbind-results-all.tsv
+    low_rna: ../rnaseq/diff_exp/verified_genes_plus_Venus/low-affinity-ZF-v-reporter-only/libsizenorm/low-affinity-ZF-v-reporter-only_rnaseq-libsizenorm-verified_genes_plus_Venus-diffexp-results-all.tsv
+    low_chip: ../chipseq-3/diff_binding/verified_genes_plus_Venus/low-affinity-ZF-v-reporter-only/libsizenorm/low-affinity-ZF-v-reporter-only_ZF-chipseq-libsizenorm-verified_genes_plus_Venus-diffbind-results-all.tsv
+    clamp_rna: ../rnaseq/diff_exp/verified_genes_plus_Venus/low-affinity-ZF-with-clamp-v-reporter-only/libsizenorm/low-affinity-ZF-with-clamp-v-reporter-only_rnaseq-libsizenorm-verified_genes_plus_Venus-diffexp-results-all.tsv
+    clamp_chip: ../chipseq-3/diff_binding/verified_genes_plus_Venus/low-affinity-ZF-with-clamp-v-reporter-only/libsizenorm/low-affinity-ZF-with-clamp-v-reporter-only_ZF-chipseq-libsizenorm-verified_genes_plus_Venus-diffbind-results-all.tsv
+

@@ -11,6 +11,7 @@ rule target:
         "figures/rnaseq_summary/rnaseq_summary.pdf",
         "figures/rnaseq_summary_alternate/rnaseq_summary_scatter_highlight_motifs.pdf",
         "figures/zf_chipseq_global_coverage/zf_chipseq_global_coverage.pdf",
+        "figures/expression_vs_chip_enrichment/expression_vs_chip_enrichment.pdf",
 
 rule register_fonts:
     input:
@@ -116,5 +117,23 @@ rule zf_chipseq_global_coverage:
         "envs/plot.yaml"
     script:
         "scripts/zf_chipseq_global_coverage.R"
+
+rule expression_vs_chip_enrichment:
+    input:
+        theme = config["theme_path"],
+        fonts = ".fonts_registered.txt",
+        high_rna = config["expression_vs_chip_enrichment"]["high_rna"],
+        high_chip = config["expression_vs_chip_enrichment"]["high_chip"],
+        low_rna = config["expression_vs_chip_enrichment"]["low_rna"],
+        low_chip = config["expression_vs_chip_enrichment"]["low_chip"],
+        clamp_rna = config["expression_vs_chip_enrichment"]["clamp_rna"],
+        clamp_chip = config["expression_vs_chip_enrichment"]["clamp_chip"],
+    output:
+        pdf = "figures/expression_vs_chip_enrichment/expression_vs_chip_enrichment.pdf",
+    conda:
+        "envs/plot.yaml"
+    script:
+        "scripts/expression_vs_chip_enrichment.R"
+
 
 

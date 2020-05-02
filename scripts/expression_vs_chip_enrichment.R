@@ -21,7 +21,7 @@ main = function(theme_path = "custom_theme.R",
                 pdf_out="test.pdf"){
     source(theme_path)
     library(cowplot)
-    
+
     df = tibble() %>%
         import(high_rna_path,
                high_chip_path,
@@ -32,7 +32,7 @@ main = function(theme_path = "custom_theme.R",
         import(clamp_rna_path,
                clamp_chip_path,
                "low-affinity + clamp")
-    
+
     unnormalized = ggplot(data=df,
            aes(x=condition_expr,
                # y=log2FC_enrichment)) +
@@ -58,7 +58,7 @@ main = function(theme_path = "custom_theme.R",
               panel.grid=element_blank(),
               axis.title.y=element_text(angle=0,
                                         vjust=0.5))
-    
+
     normalized = ggplot(data=df,
            aes(x=condition_expr,
                y=log2FC_enrichment)) +
@@ -84,13 +84,13 @@ main = function(theme_path = "custom_theme.R",
               panel.grid=element_blank(),
               axis.title.y=element_text(angle=0,
                                         vjust=0.5))
-    
+
     plot = plot_grid(unnormalized,
                      normalized,
                      ncol=1,
                      align="v",
                      axis="lr")
-    
+
     ggsave(pdf_out,
            plot=plot,
            width=16,
@@ -99,11 +99,12 @@ main = function(theme_path = "custom_theme.R",
            device=cairo_pdf)
 }
 
-main(theme_path = "custom_theme.R",
-     high_rna_path = "high-affinity-ZF-v-reporter-only_rnaseq-libsizenorm-verified_genes_plus_Venus-diffexp-results-all.tsv",
-                high_chip_path = "high-affinity-ZF-v-reporter-only_ZF-chipseq-libsizenorm-verified_genes_plus_Venus-diffbind-results-all.tsv",
-                low_rna_path = "low-affinity-ZF-v-reporter-only_rnaseq-libsizenorm-verified_genes_plus_Venus-diffexp-results-all.tsv",
-                low_chip_path = "low-affinity-ZF-v-reporter-only_ZF-chipseq-libsizenorm-verified_genes_plus_Venus-diffbind-results-all.tsv",
-                clamp_rna_path = "low-affinity-ZF-with-clamp-v-reporter-only_rnaseq-libsizenorm-verified_genes_plus_Venus-diffexp-results-all.tsv",
-                clamp_chip_path = "low-affinity-ZF-with-clamp-v-reporter-only_ZF-chipseq-libsizenorm-verified_genes_plus_Venus-diffbind-results-all.tsv",
-                pdf_out="test.pdf"){
+main(theme_path = snakemake@input[["theme"]],
+     high_rna_path = snakemake@input[["high_rna"]],
+     high_chip_path = snakemake@input[["high_chip"]],
+     low_rna_path = snakemake@input[["low_rna"]],
+     low_chip_path = snakemake@input[["low_chip"]],
+     clamp_rna_path = snakemake@input[["clamp_rna"]],
+     clamp_chip_path = snakemake@input[["clamp_chip"]],
+     pdf_out= snakemake@output[["pdf"]])
+
