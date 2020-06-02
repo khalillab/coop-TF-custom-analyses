@@ -43,3 +43,7 @@ expression_vs_chip_enrichment:
 motif_distance_vs_rnaseq:
     rnaseq: ../rnaseq/diff_exp/verified_genes_plus_Venus/high-affinity-ZF-v-reporter-only/libsizenorm/high-affinity-ZF-v-reporter-only_rnaseq-libsizenorm-verified_genes_plus_Venus-diffexp-results-all.tsv
     motifs: ../zf_motif_enrichment/comparisons/high-affinity-upregulated-transcripts-v-all-transcripts/high-affinity-upregulated-transcripts-v-all-transcripts_control_unmergedFIMOresults.tsv.gz
+
+rna_vs_chip_windows:
+    rna: ../rnaseq/diff_exp/verified_genes_plus_Venus/high-affinity-ZF-v-reporter-only/libsizenorm/high-affinity-ZF-v-reporter-only_rnaseq-libsizenorm-verified_genes_plus_Venus-diffexp-results-all.tsv
+    chip: ../chipseq-3/diff_binding/verified_genes_plus_Venus_upstream_windows/high-affinity-ZF-v-reporter-only/libsizenorm/high-affinity-ZF-v-reporter-only_ZF-chipseq-libsizenorm-verified_genes_plus_Venus_upstream_windows-diffbind-results-all.tsv

@@ -13,6 +13,7 @@ rule target:
         "figures/zf_chipseq_global_coverage/zf_chipseq_global_coverage.pdf",
         "figures/expression_vs_chip_enrichment/expression_vs_chip_enrichment.pdf",
         "figures/motif_distance_vs_rnaseq/motif_distance_vs_rnaseq.pdf",
+        "figures/rna_vs_chip_windows/rna_vs_chip_windows.pdf",
 
 rule register_fonts:
     input:
@@ -148,6 +149,19 @@ rule motif_distance_vs_rnaseq:
         "envs/plot.yaml"
     script:
         "scripts/motif_distance_vs_rnaseq.R"
+
+rule rna_vs_chip_windows:
+    input:
+        theme = config["theme_path"],
+        fonts = ".fonts_registered.txt",
+        rna = config["rna_vs_chip_windows"]["rna"],
+        chip = config["rna_vs_chip_windows"]["chip"],
+    output:
+        pdf = "figures/rna_vs_chip_windows/rna_vs_chip_windows.pdf",
+    conda:
+        "envs/plot.yaml"
+    script:
+        "scripts/rna_vs_chip_windows.R"
 
 
 

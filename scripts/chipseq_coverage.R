@@ -60,9 +60,9 @@ main = function(input_coverage,
                                        "strand")) %>%
                       select(-score),
                   by="chrom") %>%
-        filter((transcript_left >= (summit_start - 1010) & transcript_left <= (summit_end + 1010)) |
-                   (transcript_right >= (summit_start - 1010) & transcript_right <= (summit_end + 1010)) |
-                   (transcript_left <= (summit_start - 1010) & transcript_right >= (summit_end + 1010))) %>%
+        filter((transcript_left >= (summit_start - 2010) & transcript_left <= (summit_end + 2010)) |
+                   (transcript_right >= (summit_start - 2010) & transcript_right <= (summit_end + 2010)) |
+                   (transcript_left <= (summit_start - 2010) & transcript_right >= (summit_end + 2010))) %>%
         left_join(read_tsv(input_orf_annotation,
                            col_names=c("chrom",
                                        "orf_left",
@@ -139,19 +139,19 @@ main = function(input_coverage,
                          distinct(transcript_name, .keep_all=TRUE),
                      aes(y=ymin,
                          yend=ymin,
-                         x=pmax(-1.01, pmin(1.01, transcript_start)),
-                         xend=pmax(-1.01, pmin(1.01, transcript_end))),
+                         x=pmax(-2.01, pmin(2.01, transcript_start)),
+                         xend=pmax(-2.01, pmin(2.01, transcript_end))),
                      color="grey50") +
         geom_polygon(data = annotations,
-                     aes(x=pmax(-1.01, pmin(1.01, orf_x)),
+                     aes(x=pmax(-2.01, pmin(2.01, orf_x)),
                          y=orf_y * 0.07 * range + ymin,
                          group=transcript_name),
                      fill="grey80") +
         geom_text(data = annotations %>%
-                      filter((range(pmax(-1.01, pmin(1.01, orf_x)))[2] -
-                                  range(pmax(-1.01, pmin(1.01, orf_x)))[1]) > 0.4) %>%
+                      filter((range(pmax(-2.01, pmin(2.01, orf_x)))[2] -
+                                  range(pmax(-2.01, pmin(2.01, orf_x)))[1]) > 0.4) %>%
                       distinct(transcript_name, .keep_all=TRUE) %>%
-                      filter(between(label_position, -1.01, 1.01)),
+                      filter(between(label_position, -2.01, 2.01)),
                   aes(x=label_position,
                       y=ymin,
                       label=transcript_name),
@@ -163,7 +163,7 @@ main = function(input_coverage,
                   aes(x=position,
                       y=signal,
                       color=group),
-                  size=1,
+                  size=0.5,
                   alpha=0.8,
                   position=position_identity()) +
         facet_wrap(~index,
