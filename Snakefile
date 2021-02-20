@@ -16,6 +16,7 @@ rule target:
         "figures/rna_vs_chip_windows/rna_vs_chip_windows.pdf",
         "figures/chipseq_global_abundance/chipseq_global_abundance.pdf",
         "figures/reporter_chipseq_qc/reporter_chipseq_qc.pdf",
+        "figures/rnaseq_summary/rnaseq_summary_mutants.pdf",
 
 rule register_fonts:
     input:
@@ -189,5 +190,21 @@ rule reporter_chipseq_qc:
     script:
         "scripts/reporter_chipseq_qc.R"
 
-
+rule rnaseq_summary_mutants:
+    input:
+        theme = config["theme_path"],
+        fonts = ".fonts_registered.txt",
+        high_affinity = config["rnaseq_summary"]["high-affinity"],
+        low_affinity = config["rnaseq_summary"]["low-affinity"],
+        low_affinity_w_clamp = config["rnaseq_summary"]["low-affinity-w-clamp"],
+        high_affinity_zev_mutant = config["rnaseq_summary_mutants"]["high_affinity_zev_mutant"],
+        high_affinity_zftf_mutant = config["rnaseq_summary_mutants"]["high_affinity_zftf_mutant"],
+    output:
+        pdf = "figures/rnaseq_summary/rnaseq_summary_mutants.pdf",
+    params:
+        fdr = config["rnaseq_summary"]["rnaseq_fdr"],
+    conda:
+        "envs/plot.yaml"
+    script:
+        "scripts/rnaseq_summary_mutants.R"
 

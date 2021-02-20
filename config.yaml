@@ -53,3 +53,7 @@ chipseq_global_abundance:
 
 reporter_chipseq_qc:
     data: ../chipseq-4/datavis/reporter-binding-site/spikenorm/reporter-binding-site-allsamples-allannotations-ZF-chipseq-spikenorm-protection.tsv.gz
+
+rnaseq_summary_mutants:
+    high_affinity_zev_mutant: ../rnaseq/diff_exp/verified_genes_plus_Venus/high-affinity-ZF-ZEV-mutant-v-reporter-only/libsizenorm/high-affinity-ZF-ZEV-mutant-v-reporter-only_rnaseq-libsizenorm-verified_genes_plus_Venus-diffexp-results-all.tsv
+    high_affinity_zftf_mutant: ../rnaseq/diff_exp/verified_genes_plus_Venus/high-affinity-ZF-ZFTF-mutant-v-reporter-only/libsizenorm/high-affinity-ZF-ZFTF-mutant-v-reporter-only_rnaseq-libsizenorm-verified_genes_plus_Venus-diffexp-results-all.tsv
