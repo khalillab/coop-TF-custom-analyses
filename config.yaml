@@ -50,3 +50,6 @@ rna_vs_chip_windows:
 
 chipseq_global_abundance:
     data: ../chipseq-4/qual_ctrl/spikein/ZF-chipseq_spikein-counts.tsv
+
+reporter_chipseq_qc:
+    data: ../chipseq-4/datavis/reporter-binding-site/spikenorm/reporter-binding-site-allsamples-allannotations-ZF-chipseq-spikenorm-protection.tsv.gz
