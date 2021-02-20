@@ -14,6 +14,7 @@ rule target:
         "figures/expression_vs_chip_enrichment/expression_vs_chip_enrichment.pdf",
         "figures/motif_distance_vs_rnaseq/motif_distance_vs_rnaseq.pdf",
         "figures/rna_vs_chip_windows/rna_vs_chip_windows.pdf",
+        "figures/chipseq_global_abundance/chipseq_global_abundance.pdf",
 
 rule register_fonts:
     input:
@@ -162,6 +163,18 @@ rule rna_vs_chip_windows:
         "envs/plot.yaml"
     script:
         "scripts/rna_vs_chip_windows.R"
+
+rule chipseq_global_abundance:
+    input:
+        theme = config["theme_path"],
+        fonts = ".fonts_registered.txt",
+        data = config["chipseq_global_abundance"]["data"],
+    output:
+        pdf = "figures/chipseq_global_abundance/chipseq_global_abundance.pdf",
+    conda:
+        "envs/plot.yaml"
+    script:
+        "scripts/chipseq_abundance_barplot.R"
 
 
 
