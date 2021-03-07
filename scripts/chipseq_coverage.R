@@ -1,10 +1,10 @@
 library(tidyverse)
 
-main = function(input_coverage,
-                input_summit_annotation,
-                input_transcript_annotation,
-                input_orf_annotation,
-                output_path){
+main = function(input_coverage='affinity-dependent-peaks-allsamples-allannotations-ZF-chipseq-spikenorm-protection.tsv.gz',
+                input_summit_annotation='peaks_cluster-1-withVP16.bed',
+                input_transcript_annotation='Scer_transcripts_w_verifiedORFs-withVenus-URA3_reporter_strain.bed',
+                input_orf_annotation='Scer_nondubious_ORFs-withVenus-URA3_reporter_strain.bed',
+                output_path='test.pdf'){
     df = read_tsv(input_coverage,
                   col_names=c("group",
                               "sample",
@@ -14,32 +14,50 @@ main = function(input_coverage,
                               "position",
                               "signal")) %>%
         group_by(group,
+                 type,
                  annotation,
                  index,
                  position) %>%
         summarize(signal=mean(signal)) %>%
         ungroup() %>%
-        # mutate(signal=scales::rescale(signal)) %>%
-        spread(key=group,
-               value=signal) %>%
-        mutate_at(c("high-affinity-ZF",
-                    "low-affinity-ZF",
-                    "low-affinity-ZF-with-clamp"),
-                  # ~(./(`reporter-only`+0.01))) %>%
-                  ~(.-`reporter-only`)) %>%
-        select(-`reporter-only`) %>%
-        gather(key=group,
-               value=signal,
-               -c(annotation,
-                  index,
-                  position)) %>%
         mutate(group=ordered(group,
                              levels=c("high-affinity-ZF",
+                                      "high-affinity-ZF-noVP16",
                                       "low-affinity-ZF",
-                                      "low-affinity-ZF-with-clamp"),
+                                      "low-affinity-ZF-noVP16",
+                                      "low-affinity-ZF-with-clamp",
+                                      "low-affinity-ZF-with-clamp-noVP16",
+                                      "reporter-only"),
                              labels=c("high-affinity ZF",
+                                      "high-affinity ZF,\nno VP16",
                                       "low-affinity ZF",
-                                      "low-affinity ZF\nwith clamp")))
+                                      "low-affinity ZF,\nno VP16",
+                                      "low-affinity ZF\nwith clamp",
+                                      "low-affinity ZF\nwith clamp, no VP16",
+                                      "reporter-only")))
+
+    # #%>%
+    #     # mutate(signal=scales::rescale(signal)) %>%
+    #     spread(key=group,
+    #            value=signal) %>%
+    #     mutate_at(c("high-affinity-ZF",
+    #                 "low-affinity-ZF",
+    #                 "low-affinity-ZF-with-clamp"),
+    #               # ~(./(`reporter-only`+0.01))) %>%
+    #               ~(.-`reporter-only`)) %>%
+    #     select(-`reporter-only`) %>%
+    #     gather(key=group,
+    #            value=signal,
+    #            -c(annotation,
+    #               index,
+    #               position)) %>%
+    #     mutate(group=ordered(group,
+    #                          levels=c("high-affinity-ZF",
+    #                                   "low-affinity-ZF",
+    #                                   "low-affinity-ZF-with-clamp"),
+    #                          labels=c("high-affinity ZF",
+    #                                   "low-affinity ZF",
+    #                                   "low-affinity ZF\nwith clamp")))
 
     annotations = read_tsv(input_summit_annotation,
                            col_names=c("chrom",
@@ -155,26 +173,30 @@ main = function(input_coverage,
                   aes(x=label_position,
                       y=ymin,
                       label=transcript_name),
-                  size=8/72*25.4,
+                  size=6/72*25.4,
                   fontface="italic",
                   family="FreeSans",
                   vjust=0.6) +
         geom_line(data = df,
                   aes(x=position,
                       y=signal,
-                      color=group),
-                  size=0.5,
+                      color=group,
+                      linetype=type),
+                  size=0.4,
                   alpha=0.8,
                   position=position_identity()) +
         facet_wrap(~index,
                    scales="free_y") +
                    # scales="fixed") +
-        scale_color_viridis_d(end=0.85,
+        # scale_color_viridis_d(end=0.85,
+        scale_color_brewer(palette = 'Paired',
                               name="relative ChIP enrichment:",
                               guide=guide_legend(label.position="top",
                                                  label.vjust=0.5,
                                                  title.vjust=0.8,
                                                  override.aes=list(size=2))) +
+        scale_linetype_discrete(name=NULL,
+                                guide=guide_legend(label.position="top")) +
         scale_x_continuous(expand=c(0,0),
                            breaks=scales::pretty_breaks(n=2),
                            labels=function(x) case_when(x==0 ~ "peak summit",
@@ -204,7 +226,7 @@ main = function(input_coverage,
     ggsave(output_path,
            plot=plot,
            width=16,
-           height=9,
+           height=12,
            units="cm",
            device=cairo_pdf)
 }
@@ -214,4 +236,3 @@ main(input_coverage=snakemake@input[["coverage"]],
      input_transcript_annotation=snakemake@input[["transcript_annotation"]],
      input_orf_annotation=snakemake@input[["orf_annotation"]],
      output_path=snakemake@output[["coverage"]])
-

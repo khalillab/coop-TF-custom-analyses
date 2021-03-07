@@ -10,10 +10,21 @@ rnaseq:
     low-affinity-w-clamp: ../rnaseq/diff_exp/verified_genes_plus_Venus/low-affinity-ZF-with-clamp-v-reporter-only/libsizenorm/low-affinity-ZF-with-clamp-v-reporter-only_rnaseq-libsizenorm-verified_genes_plus_Venus-diffexp-results-all.tsv
 
 chipseq_coverage:
-    coverage: ../chipseq-3/datavis/affinity-dependent-peaks/libsizenorm/affinity-dependent-peaks-allsamples-allannotations-ZF-chipseq-libsizenorm-ratio.tsv.gz
-    peak_annotation: ../chipseq-3/datavis/affinity-dependent-peaks/libsizenorm/all-v-all/passing/ratio/peaks_cluster-1.bed
-    transcripts: ../genome/annotations/Scer_transcripts_w_verifiedORFs-withVenus-URA3_reporter_strain.bed
-    orfs: ../genome/annotations/Scer_nondubious_ORFs-withVenus-URA3_reporter_strain.bed
+    chipseq-3:
+        coverage: ../chipseq-3/datavis/affinity-dependent-peaks/libsizenorm/affinity-dependent-peaks-allsamples-allannotations-ZF-chipseq-libsizenorm-protection.tsv.gz
+        peak_annotation: ../chipseq-3/datavis/affinity-dependent-peaks/libsizenorm/all-v-all/passing/ratio/peaks_cluster-1.bed
+        transcripts: ../genome/annotations/Scer_transcripts_w_verifiedORFs-withVenus-URA3_reporter_strain.bed
+        orfs: ../genome/annotations/Scer_nondubious_ORFs-withVenus-URA3_reporter_strain.bed
+    chipseq-5-withVP16:
+        coverage: ../chipseq-5/datavis/affinity-dependent-peaks/spikenorm/affinity-dependent-peaks-allsamples-allannotations-ZF-chipseq-spikenorm-protection.tsv.gz
+        peak_annotation: ../chipseq-5/datavis/affinity-dependent-peaks/spikenorm/all-v-all/passing/protection/peaks_cluster-1.bed
+        transcripts: ../genome/annotations/Scer_transcripts_w_verifiedORFs-withVenus-URA3_reporter_strain.bed
+        orfs: ../genome/annotations/Scer_nondubious_ORFs-withVenus-URA3_reporter_strain.bed
+    chipseq-5-noVP16:
+        coverage: ../chipseq-5/datavis/affinity-dependent-peaks-noVP16/spikenorm/affinity-dependent-peaks-noVP16-allsamples-allannotations-ZF-chipseq-spikenorm-protection.tsv.gz
+        peak_annotation: ../chipseq-5/datavis/affinity-dependent-peaks-noVP16/spikenorm/all-v-all/passing/protection/peaks_cluster-1.bed
+        transcripts: ../genome/annotations/Scer_transcripts_w_verifiedORFs-withVenus-URA3_reporter_strain.bed
+        orfs: ../genome/annotations/Scer_nondubious_ORFs-withVenus-URA3_reporter_strain.bed
 
 zf_venus_reporter_datavis:
     target_annotation: ../zf_data_integration/browser-shots/Venus/Venus.bed
@@ -49,10 +60,13 @@ rna_vs_chip_windows:
     chip: ../chipseq-3/diff_binding/verified_genes_plus_Venus_upstream_windows/high-affinity-ZF-v-reporter-only/libsizenorm/high-affinity-ZF-v-reporter-only_ZF-chipseq-libsizenorm-verified_genes_plus_Venus_upstream_windows-diffbind-results-all.tsv
 
 chipseq_global_abundance:
-    data: ../chipseq-4/qual_ctrl/spikein/ZF-chipseq_spikein-counts.tsv
+    chipseq-4-qc: ../chipseq-4/qual_ctrl/spikein/ZF-chipseq_spikein-counts.tsv
+    chipseq-5: ../chipseq-5/qual_ctrl/spikein/ZF-chipseq_spikein-counts.tsv
 
 reporter_chipseq_qc:
-    data: ../chipseq-4/datavis/reporter-binding-site/spikenorm/reporter-binding-site-allsamples-allannotations-ZF-chipseq-spikenorm-protection.tsv.gz
+    chipseq-3: ../chipseq-3/datavis/reporter-binding-site/libsizenorm/reporter-binding-site-allsamples-allannotations-ZF-chipseq-libsizenorm-protection.tsv.gz
+    chipseq-4-qc: ../chipseq-4/datavis/reporter-binding-site/spikenorm/reporter-binding-site-allsamples-allannotations-ZF-chipseq-spikenorm-protection.tsv.gz
+    chipseq-5: ../chipseq-5/datavis/reporter-binding-site/spikenorm/reporter-binding-site-allsamples-allannotations-ZF-chipseq-spikenorm-protection.tsv.gz
 
 rnaseq_summary_mutants:
     high_affinity_zev_mutant: ../rnaseq/diff_exp/verified_genes_plus_Venus/high-affinity-ZF-ZEV-mutant-v-reporter-only/libsizenorm/high-affinity-ZF-ZEV-mutant-v-reporter-only_rnaseq-libsizenorm-verified_genes_plus_Venus-diffexp-results-all.tsv

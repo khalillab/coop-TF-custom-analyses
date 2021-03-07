@@ -6,7 +6,7 @@ rule target:
     input:
         ".fonts_registered.txt",
         "figures/rnaseq_summary.pdf",
-        "figures/zf_chipseq_coverage-affinity-dependent-peaks.pdf",
+        expand("figures/zf_chipseq_coverage/zf_chipseq_coverage-affinity-dependent-peaks-{dataset}.pdf", dataset=config['chipseq_coverage']),
         "figures/zf_venus_reporter_datavis.pdf",
         "figures/rnaseq_summary/rnaseq_summary.pdf",
         "figures/rnaseq_summary_alternate/rnaseq_summary_scatter_highlight_motifs.pdf",
@@ -14,8 +14,8 @@ rule target:
         "figures/expression_vs_chip_enrichment/expression_vs_chip_enrichment.pdf",
         "figures/motif_distance_vs_rnaseq/motif_distance_vs_rnaseq.pdf",
         "figures/rna_vs_chip_windows/rna_vs_chip_windows.pdf",
-        "figures/chipseq_global_abundance/chipseq_global_abundance.pdf",
-        "figures/reporter_chipseq_qc/reporter_chipseq_qc.pdf",
+        expand("figures/chipseq_global_abundance/chipseq_global_abundance_{dataset}.pdf", dataset=config["chipseq_global_abundance"]),
+        expand("figures/reporter_chipseq_qc/reporter_chipseq_qc_{dataset}.pdf", dataset=config['reporter_chipseq_qc']),
         "figures/rnaseq_summary/rnaseq_summary_mutants.pdf",
 
 rule register_fonts:
@@ -47,13 +47,13 @@ rule rnaseq_figures:
 
 rule chipseq_coverage:
     input:
-        output_path = ".fonts_registered.txt",
-        coverage = config["chipseq_coverage"]["coverage"],
-        summit_annotation = config["chipseq_coverage"]["peak_annotation"],
-        transcript_annotation = config["chipseq_coverage"]["transcripts"],
-        orf_annotation = config["chipseq_coverage"]["orfs"],
+        fonts = ".fonts_registered.txt",
+        coverage = lambda wc: config["chipseq_coverage"][wc.dataset]["coverage"],
+        summit_annotation = lambda wc: config["chipseq_coverage"][wc.dataset]["peak_annotation"],
+        transcript_annotation = lambda wc: config["chipseq_coverage"][wc.dataset]["transcripts"],
+        orf_annotation = lambda wc: config["chipseq_coverage"][wc.dataset]["orfs"],
     output:
-        coverage = "figures/zf_chipseq_coverage-affinity-dependent-peaks.pdf"
+        coverage = "figures/zf_chipseq_coverage/zf_chipseq_coverage-affinity-dependent-peaks-{dataset}.pdf"
     conda:
         "envs/plot.yaml"
     script:
@@ -170,9 +170,9 @@ rule chipseq_global_abundance:
     input:
         theme = config["theme_path"],
         fonts = ".fonts_registered.txt",
-        data = config["chipseq_global_abundance"]["data"],
+        data = lambda wc: config["chipseq_global_abundance"][wc.dataset],
     output:
-        pdf = "figures/chipseq_global_abundance/chipseq_global_abundance.pdf",
+        pdf = "figures/chipseq_global_abundance/chipseq_global_abundance_{dataset}.pdf",
     conda:
         "envs/plot.yaml"
     script:
@@ -182,9 +182,9 @@ rule reporter_chipseq_qc:
     input:
         theme = config["theme_path"],
         fonts = ".fonts_registered.txt",
-        data = config["reporter_chipseq_qc"]["data"],
+        data = lambda wc: config["reporter_chipseq_qc"][wc.dataset],
     output:
-        pdf = "figures/reporter_chipseq_qc/reporter_chipseq_qc.pdf",
+        pdf = "figures/reporter_chipseq_qc/reporter_chipseq_qc_{dataset}.pdf",
     conda:
         "envs/plot.yaml"
     script:
@@ -204,7 +204,7 @@ rule rnaseq_summary_mutants:
     params:
         fdr = config["rnaseq_summary"]["rnaseq_fdr"],
     conda:
-        "envs/plot.yaml"
+        "envs/ggforce.yaml"
     script:
-        "scripts/rnaseq_summary_mutants.R"
+        "scripts/rnaseq_summary_mutants_new.R"
 
