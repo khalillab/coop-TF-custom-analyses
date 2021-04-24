@@ -7,6 +7,7 @@ rule target:
         ".fonts_registered.txt",
         "figures/rnaseq_summary.pdf",
         expand("figures/zf_chipseq_coverage/zf_chipseq_coverage-affinity-dependent-peaks-{dataset}.pdf", dataset=config['chipseq_coverage']),
+        expand("figures/zf_chipseq_coverage_ratio_motifs/zf_chipseq_coverage-ratio-affinity-dependent-peaks-{dataset}.pdf", dataset=config['chipseq_coverage_ratio']),
         "figures/zf_venus_reporter_datavis.pdf",
         "figures/rnaseq_summary/rnaseq_summary.pdf",
         "figures/rnaseq_summary_alternate/rnaseq_summary_scatter_highlight_motifs.pdf",
@@ -17,6 +18,8 @@ rule target:
         expand("figures/chipseq_global_abundance/chipseq_global_abundance_{dataset}.pdf", dataset=config["chipseq_global_abundance"]),
         expand("figures/reporter_chipseq_qc/reporter_chipseq_qc_{dataset}.pdf", dataset=config['reporter_chipseq_qc']),
         "figures/rnaseq_summary/rnaseq_summary_mutants.pdf",
+        "figures/rnaseq_summary/rnaseq_summary_mutants_all.pdf",
+        'figures/chip_hits_w_rnaseq_info/chip_joined.tsv'
 
 rule register_fonts:
     input:
@@ -58,6 +61,23 @@ rule chipseq_coverage:
         "envs/plot.yaml"
     script:
         "scripts/chipseq_coverage.R"
+
+rule chipseq_coverage_ratio:
+    input:
+        fonts = ".fonts_registered.txt",
+        coverage = lambda wc: config["chipseq_coverage_ratio"][wc.dataset]["coverage"],
+        summit_annotation = lambda wc: config["chipseq_coverage_ratio"][wc.dataset]["peak_annotation"],
+        transcript_annotation = lambda wc: config["chipseq_coverage_ratio"][wc.dataset]["transcripts"],
+        orf_annotation = lambda wc: config["chipseq_coverage_ratio"][wc.dataset]["orfs"],
+        motif_annotation = lambda wc: config["chipseq_coverage_ratio"][wc.dataset]["motifs"],
+    output:
+        coverage = "figures/zf_chipseq_coverage_ratio_motifs/zf_chipseq_coverage-ratio-affinity-dependent-peaks-{dataset}.pdf"
+    params:
+        filter_groups = lambda wc: config["chipseq_coverage_ratio"][wc.dataset]["filter_groups"],
+    conda:
+        "envs/plot.yaml"
+    script:
+        "scripts/chipseq_coverage_ratio_motifs.R"
 
 rule zf_venus_reporter_datavis:
     input:
@@ -208,3 +228,65 @@ rule rnaseq_summary_mutants:
     script:
         "scripts/rnaseq_summary_mutants_new.R"
 
+rule rnaseq_summary_mutants_all:
+    input:
+        theme = config["theme_path"],
+        fonts = ".fonts_registered.txt",
+        high_affinity = config["rnaseq_summary"]["high-affinity"],
+        low_affinity = config["rnaseq_summary"]["low-affinity"],
+        low_affinity_w_clamp = config["rnaseq_summary"]["low-affinity-w-clamp"],
+        high_affinity_zev_mutant = config["rnaseq_summary_mutants"]["high_affinity_zev_mutant"],
+        high_affinity_zftf_mutant = config["rnaseq_summary_mutants"]["high_affinity_zftf_mutant"],
+    output:
+        pdf = "figures/rnaseq_summary/rnaseq_summary_mutants_all.pdf",
+    params:
+        fdr = config["rnaseq_summary"]["rnaseq_fdr"],
+    conda:
+        "envs/ggforce.yaml"
+    script:
+        "scripts/rnaseq_summary_mutants_all.R"
+
+rule join_chip:
+    input:
+        affinity_dependent = config['chip_hits_w_rnaseq_info']['affinity_dependent_peaks'],
+        high = config['chip_hits_w_rnaseq_info']['chip_results']['high'],
+        low = config['chip_hits_w_rnaseq_info']['chip_results']['low'],
+        low_clamp = config['chip_hits_w_rnaseq_info']['chip_results']['low_clamp'],
+    output:
+        tsv = 'figures/chip_hits_w_rnaseq_info/chip_joined.tsv'
+    conda:
+        "envs/plot.yaml"
+    script:
+        "scripts/join_chip.R"
+
+rule join_rna:
+    input:
+        high = config['chip_hits_w_rnaseq_info']['rna_results']['high'],
+        low = config['chip_hits_w_rnaseq_info']['rna_results']['low'],
+        low_clamp = config['chip_hits_w_rnaseq_info']['rna_results']['low_clamp'],
+    output:
+        tsv = 'figures/chip_hits_w_rnaseq_info/rna_joined.tsv'
+    conda:
+        "envs/plot.yaml"
+    script:
+        "scripts/join_rna.R"
+
+rule chip_hits_w_rnaseq_info:
+    input:
+        chip = 'figures/chip_hits_w_rnaseq_info/chip_joined.tsv',
+        rna = 'figures/chip_hits_w_rnaseq_info/rna_joined.tsv'
+    output:
+        'figures/chip_hits_w_rnaseq_info/chip_hits_w_rnaseq_info.tsv'
+    shell: """
+        bedtools closest \
+            -a <(tail -n +2 {input.chip} | \
+                 awk 'BEGIN{{OFS="\t"}} {{print $0, NR}}' | \
+                 sort -k1,1 -k2,2n) \
+            -b <(tail -n +2 {input.rna} | \
+                 sort -k1,1 -k2,2n) \
+            -k 2 | \
+        sort -k8,8n | \
+        cut -f8 --complement | \
+        cat <(paste <(head -n 1 {input.chip}) <(head -n 1 {input.rna})) - > \
+        {output}
+        """
