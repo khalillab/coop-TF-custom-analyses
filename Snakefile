@@ -8,6 +8,7 @@ rule target:
         "figures/rnaseq_summary.pdf",
         expand("figures/zf_chipseq_coverage/zf_chipseq_coverage-affinity-dependent-peaks-{dataset}.pdf", dataset=config['chipseq_coverage']),
         expand("figures/zf_chipseq_coverage_ratio_motifs/zf_chipseq_coverage-ratio-affinity-dependent-peaks-{dataset}.pdf", dataset=config['chipseq_coverage_ratio']),
+        expand("figures/zf_chipseq_coverage_ratio_motifs/zf_chipseq_coverage-ratio-affinity-dependent-peaks-{dataset}-freescale.pdf", dataset=config['chipseq_coverage_ratio']),
         "figures/zf_venus_reporter_datavis.pdf",
         "figures/rnaseq_summary/rnaseq_summary.pdf",
         "figures/rnaseq_summary_alternate/rnaseq_summary_scatter_highlight_motifs.pdf",
@@ -78,6 +79,23 @@ rule chipseq_coverage_ratio:
         "envs/plot.yaml"
     script:
         "scripts/chipseq_coverage_ratio_motifs.R"
+
+rule chipseq_coverage_ratio_freescale:
+    input:
+        fonts = ".fonts_registered.txt",
+        coverage = lambda wc: config["chipseq_coverage_ratio"][wc.dataset]["coverage"],
+        summit_annotation = lambda wc: config["chipseq_coverage_ratio"][wc.dataset]["peak_annotation"],
+        transcript_annotation = lambda wc: config["chipseq_coverage_ratio"][wc.dataset]["transcripts"],
+        orf_annotation = lambda wc: config["chipseq_coverage_ratio"][wc.dataset]["orfs"],
+        motif_annotation = lambda wc: config["chipseq_coverage_ratio"][wc.dataset]["motifs"],
+    output:
+        coverage = "figures/zf_chipseq_coverage_ratio_motifs/zf_chipseq_coverage-ratio-affinity-dependent-peaks-{dataset}-freescale.pdf"
+    params:
+        filter_groups = lambda wc: config["chipseq_coverage_ratio"][wc.dataset]["filter_groups"],
+    conda:
+        "envs/plot.yaml"
+    script:
+        "scripts/chipseq_coverage_ratio_motifs_freescale.R"
 
 rule zf_venus_reporter_datavis:
     input:
