@@ -4,6 +4,9 @@ import = function(path, strain_id){
         mutate(strain=strain_id) %>%
         return()
 }
+sub_distance = function(a,b){
+    return(mapply(function(x,y) sum(x!=y),strsplit(a,""),strsplit(b,"")))
+}
 
 main = function(theme_path = "custom_theme.R",
                 input_high_affinity = "high-affinity-ZF-v-reporter-only_rnaseq-libsizenorm-verified_genes_plus_Venus-diffexp-results-all.tsv",
@@ -22,17 +25,20 @@ main = function(theme_path = "custom_theme.R",
 
     motif_hits = read_tsv(motif_results) %>%
         filter(motif_start >= 0) %>%
-        pull(region_id) %>%
-        unique()
+        mutate(n_mismatch = sub_distance(match_sequence, 'GACGCTGCT'))
 
-    chip_hits = c("VRP1",
-                  "Venus",
-                  "PHO8",
+    chip_hits = c("Venus",
+                  "HMS1",
+                  "AMF1",
+                  "PRY1",
+                  "REB1",
+                  "VRP1",
                   "FTR1",
-                  "PMA2",
-                  "PRY3",
-                  "ENO1",
-                  "AIM3")
+                  "DAN1",
+                  "PAC11",
+                  "OCH1",
+                  "YDL144C",
+                  "SUR2")
 
     df = import(input_high_affinity,
                 "high-affinity") %>%
@@ -52,14 +58,15 @@ main = function(theme_path = "custom_theme.R",
 
     df %<>%
         mutate(name = ordered(name, levels=gene_order),
-               motif_hit = name %in% motif_hits,
+               motif_hit = name %in% (motif_hits %>% filter(n_mismatch < 2) %>% pull(region_id)),
                chip_hit = name %in% chip_hits)
 
     reporter_coord_x = df %>%
-        filter(name=="Venus") %>%
-        slice(1) %>%
-        pull(name) %>%
-        as.integer()
+        # filter(name=="Venus") %>%
+        filter(name %in% chip_hits) %>%
+        distinct(name, .keep_all=TRUE) #%>%
+        # pull(name) %>%
+        # as.integer()
 
     rnaseq_summary = ggplot(data = df,
                             aes(x=as.numeric(name),
@@ -68,20 +75,28 @@ main = function(theme_path = "custom_theme.R",
                                 # ymax=log2_foldchange + lfc_SE,
                                 color=strain,
                                 fill=strain)) +
-        geom_vline(xintercept=reporter_coord_x,
+        geom_vline(xintercept=as.integer(reporter_coord_x[['name']]),
                    size=0.4,
                    color="gray70",
                    alpha=0.4) +
+        geom_text(data=reporter_coord_x,
+                  aes(x=as.integer(name),
+                      label=name),
+                  color='black',
+                  y=-2,
+                  angle=90,
+                  family='FreeSans',
+                  size=5/72*25.4) +
         geom_hline(yintercept = 0,
                    color="grey70",
                    size=0.2) +
         # geom_linerange(alpha=0.4,
                        # size=0.2) +
-        geom_point(aes(shape=motif_hit),
+        geom_point(#aes(shape=motif_hit),
                    size=0.5,
                    alpha=0.8,
                    stroke=0.1) +
-        facet_zoom(xlim=c(214, 321),
+        facet_zoom(xlim=c(114, 214),
                    zoom.size=1) +
         scale_fill_viridis_d(end=0.85,
                               name=NULL,
@@ -89,8 +104,8 @@ main = function(theme_path = "custom_theme.R",
         scale_color_viridis_d(end=0.85,
                               name=NULL,
                               guide=guide_legend(override.aes = list(size=1))) +
-        scale_shape_manual(values=c(1, 21),
-                           guide=FALSE) +
+        # scale_shape_manual(values=c(1, 21),
+                           # guide=FALSE) +
         scale_x_continuous(expand=c(0.01, 0),
                            name="genes differentially expressed vs. reporter-only") +
         scale_y_continuous(name=expression("log"[2] ~ bgroup("[",
@@ -184,4 +199,3 @@ main(theme_path = snakemake@input[["theme"]],
      # fig_width=snakemake@params[["fig_width"]],
      # fig_height=snakemake@params[["fig_height"]],
      pdf_out= snakemake@output[["pdf"]])
-
