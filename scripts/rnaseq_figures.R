@@ -105,7 +105,7 @@ main = function(input_high_affinity,
     ggsave(output_maplot,
            plot=maplot,
            width=16,
-           height=9,
+           height=7,
            units="cm")
 
     # plot = ggplot() +

@@ -106,4 +106,7 @@ chip_hits_w_rnaseq_info:
         low_clamp: ../rnaseq/diff_exp/verified_genes_plus_Venus/low-affinity-ZF-with-clamp-v-reporter-only/libsizenorm/low-affinity-ZF-with-clamp-v-reporter-only_rnaseq-libsizenorm-verified_genes_plus_Venus-diffexp-results-all.tsv
 
 
-
+rnaseq_volcano_custom:
+    low_v_high: ../rnaseq/diff_exp/verified_genes_plus_Venus/low-affinity-ZF-v-high-affinity-ZF/libsizenorm/low-affinity-ZF-v-high-affinity-ZF_rnaseq-libsizenorm-verified_genes_plus_Venus-diffexp-results-all.tsv
+    low_clamp_v_high: ../rnaseq/diff_exp/verified_genes_plus_Venus/low-affinity-ZF-with-clamp-v-high-affinity-ZF/libsizenorm/low-affinity-ZF-with-clamp-v-high-affinity-ZF_rnaseq-libsizenorm-verified_genes_plus_Venus-diffexp-results-all.tsv
+    low_clamp_v_low: ../rnaseq/diff_exp/verified_genes_plus_Venus/low-affinity-ZF-with-clamp-v-low-affinity-ZF/libsizenorm/low-affinity-ZF-with-clamp-v-low-affinity-ZF_rnaseq-libsizenorm-verified_genes_plus_Venus-diffexp-results-all.tsv

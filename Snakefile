@@ -20,7 +20,8 @@ rule target:
         expand("figures/reporter_chipseq_qc/reporter_chipseq_qc_{dataset}.pdf", dataset=config['reporter_chipseq_qc']),
         "figures/rnaseq_summary/rnaseq_summary_mutants.pdf",
         "figures/rnaseq_summary/rnaseq_summary_mutants_all.pdf",
-        'figures/chip_hits_w_rnaseq_info/chip_joined.tsv'
+        'figures/chip_hits_w_rnaseq_info/chip_joined.tsv',
+        "figures/rnaseq_volcano_custom.pdf",
 
 rule register_fonts:
     input:
@@ -308,3 +309,20 @@ rule chip_hits_w_rnaseq_info:
         cat <(paste <(head -n 1 {input.chip}) <(head -n 1 {input.rna})) - > \
         {output}
         """
+
+rule rnaseq_volcano_custom:
+    input:
+        theme = config["theme_path"],
+        low_v_high = config["rnaseq_volcano_custom"]["low_v_high"],
+        low_clamp_v_high = config["rnaseq_volcano_custom"]["low_clamp_v_high"],
+        low_clamp_v_low = config["rnaseq_volcano_custom"]["low_clamp_v_low"],
+        fonts = ".fonts_registered.txt"
+    output:
+        volcano = "figures/rnaseq_volcano_custom.pdf",
+    conda:
+        "envs/plot.yaml"
+    params:
+        fdr = config["rnaseq"]["fdr"]
+    script:
+        "scripts/rnaseq_volcano_custom.R"
+
