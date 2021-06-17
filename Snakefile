@@ -22,6 +22,9 @@ rule target:
         "figures/rnaseq_summary/rnaseq_summary_mutants_all.pdf",
         'figures/chip_hits_w_rnaseq_info/chip_joined.tsv',
         "figures/rnaseq_volcano_custom.pdf",
+        "figures/rnaseq_summary/rnaseq_summary_13_6.pdf",
+        "figures/rnaseq_volcano_custom_13_6.pdf",
+        "figures/rnaseq_maplot_13_6.pdf",
 
 rule register_fonts:
     input:
@@ -326,3 +329,52 @@ rule rnaseq_volcano_custom:
     script:
         "scripts/rnaseq_volcano_custom.R"
 
+rule rnaseq_summary_13_6:
+    input:
+        theme = config["theme_path"],
+        fonts = ".fonts_registered.txt",
+        high_affinity = config["rnaseq_summary_13_6"]["high-affinity"],
+        low_affinity = config["rnaseq_summary_13_6"]["low-affinity"],
+        low_affinity_w_clamp = config["rnaseq_summary_13_6"]["low-affinity-w-clamp"],
+        # motif_results = config["rnaseq_summary"]["motif_results"],
+    output:
+        pdf = "figures/rnaseq_summary/rnaseq_summary_13_6.pdf",
+    params:
+        fdr = config["rnaseq_summary"]["rnaseq_fdr"],
+    conda:
+        "envs/ggforce.yaml"
+    script:
+        "scripts/rnaseq_summary_13-6.R"
+
+rule rnaseq_volcano_custom_13_6:
+    input:
+        theme = config["theme_path"],
+        low_v_high = config["rnaseq_volcano_custom_13_6"]["low_v_high"],
+        low_clamp_v_high = config["rnaseq_volcano_custom_13_6"]["low_clamp_v_high"],
+        low_clamp_v_low = config["rnaseq_volcano_custom_13_6"]["low_clamp_v_low"],
+        fonts = ".fonts_registered.txt"
+    output:
+        volcano = "figures/rnaseq_volcano_custom_13_6.pdf",
+    conda:
+        "envs/plot.yaml"
+    params:
+        fdr = config["rnaseq"]["fdr"]
+    script:
+        "scripts/rnaseq_volcano_custom.R"
+
+rule rnaseq_figures_13_6:
+    input:
+        high_affinity = config["rnaseq_13_6"]["high-affinity"],
+        low_affinity = config["rnaseq_13_6"]["low-affinity"],
+        low_affinity_w_clamp = config["rnaseq_13_6"]["low-affinity-w-clamp"],
+        fonts = ".fonts_registered.txt"
+    output:
+        volcano = "figures/rnaseq_volcano_13_6.pdf",
+        maplot = "figures/rnaseq_maplot_13_6.pdf",
+        summary = "figures/rnaseq_summary_13_6.pdf",
+    conda:
+        "envs/plot.yaml"
+    params:
+        fdr = config["rnaseq"]["fdr"]
+    script:
+        "scripts/rnaseq_figures.R"
