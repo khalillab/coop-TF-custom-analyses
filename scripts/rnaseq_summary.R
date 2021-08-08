@@ -17,7 +17,9 @@ main = function(theme_path = "custom_theme.R",
                 # panel_letter = "A",
                 fig_width = 17.4,
                 fig_height= 6,
-                pdf_out="test.pdf"){
+                pdf_out="test.pdf",
+                data_tsv_out='test.tsv',
+                motif_genes_out='motif_genes.tsv'){
 
     source(theme_path)
     library(ggforce)
@@ -61,6 +63,12 @@ main = function(theme_path = "custom_theme.R",
                motif_hit = name %in% (motif_hits %>% filter(n_mismatch < 2) %>% pull(region_id)),
                chip_hit = name %in% chip_hits)
 
+    df %>% write_tsv(data_tsv_out)
+
+    df %>% filter(strain=='high-affinity' & significant & motif_hit) %>%
+        select(chrom, start, end, name, score, strand) %>%
+        write_tsv(motif_genes_out)
+
     reporter_coord_x = df %>%
         # filter(name=="Venus") %>%
         filter(name %in% chip_hits) %>%
@@ -92,7 +100,7 @@ main = function(theme_path = "custom_theme.R",
                    size=0.2) +
         # geom_linerange(alpha=0.4,
                        # size=0.2) +
-        geom_point(#aes(shape=motif_hit),
+        geom_point(aes(shape=motif_hit),
                    size=0.5,
                    alpha=0.8,
                    stroke=0.1) +
@@ -104,8 +112,8 @@ main = function(theme_path = "custom_theme.R",
         scale_color_viridis_d(end=0.85,
                               name=NULL,
                               guide=guide_legend(override.aes = list(size=1))) +
-        # scale_shape_manual(values=c(1, 21),
-                           # guide=FALSE) +
+        scale_shape_manual(values=c(1, 21),
+                           guide=FALSE) +
         scale_x_continuous(expand=c(0.01, 0),
                            name="genes differentially expressed vs. reporter-only") +
         scale_y_continuous(name=expression("log"[2] ~ bgroup("[",
@@ -198,4 +206,6 @@ main(theme_path = snakemake@input[["theme"]],
      # panel_letter=snakemake@params[["panel_letter"]],
      # fig_width=snakemake@params[["fig_width"]],
      # fig_height=snakemake@params[["fig_height"]],
-     pdf_out= snakemake@output[["pdf"]])
+     pdf_out= snakemake@output[["pdf"]],
+     data_tsv_out=snakemake@output[["data_tsv"]],
+     motif_genes_out=snakemake@output[['motif_genes']])

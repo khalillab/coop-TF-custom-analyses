@@ -1,21 +1,32 @@
-library(tidyverse)
-library(magrittr)
-# library(ggpmisc)
-# library(ggrepel)
-
 import = function(path, strain_id){
     read_tsv(path) %>%
         mutate(strain=strain_id) %>%
         return()
 }
 
-main = function(input_high_affinity,
-                input_low_affinity,
-                input_low_affinity_w_clamp,
-                fdr,
-                output_volcano,
-                output_maplot,
-                output_summary){
+main = function(theme_path='custom_theme.R',
+                input_high_affinity='high-affinity-ZF-v-reporter-only_rnaseq-libsizenorm-verified_genes_plus_Venus-diffexp-results-all.tsv',
+                input_low_affinity='low-affinity-ZF-v-reporter-only_rnaseq-libsizenorm-verified_genes_plus_Venus-diffexp-results-all.tsv',
+                input_low_affinity_w_clamp='low-affinity-ZF-with-clamp-v-reporter-only_rnaseq-libsizenorm-verified_genes_plus_Venus-diffexp-results-all.tsv',
+                fdr=0.1,
+                output_volcano='test_volcano.pdf',
+                output_maplot='test_maplot.pdf',
+                output_summary='test_summary.pdf'){
+
+    source(theme_path)
+
+    chip_hits = c("Venus",
+                  "HMS1",
+                  # "AMF1",
+                  "PRY1",
+                  "REB1",
+                  "VRP1",
+                  "FTR1",
+                  "DAN1",
+                  "PAC11",
+                  "OCH1",
+                  "YDL144C",
+                  "SUR2")
 
     df = import(input_high_affinity,
                 "high-affinity ZF") %>%
@@ -23,7 +34,8 @@ main = function(input_high_affinity,
                          "low-affinity ZF")) %>%
         bind_rows(import(input_low_affinity_w_clamp,
                          "low-affinity ZF with clamp")) %>%
-        mutate(significant = (log10_padj > -log10(fdr)))
+        mutate(significant = (log10_padj > -log10(fdr))) %>%
+        mutate(chip_hit = name %in% chip_hits)
 
     volcano = ggplot() +
         geom_vline(xintercept=0,
@@ -46,27 +58,29 @@ main = function(input_high_affinity,
                                                              "]"))) +
         scale_alpha_manual(values=c(0.2, 0.6)) +
         scale_color_manual(values=c("grey40", "#440154FF")) +
-        theme_light() +
-        theme(text=element_text(color="black",
-                                size=10),
-              strip.background=element_blank(),
-              strip.text=element_text(color="black"),
-              legend.position="none",
-              axis.text=element_text(color="black"),
-              axis.title=element_text(size=10),
-              axis.title.y=element_text(angle=0, vjust=0.5),
-              panel.grid=element_blank())
+        theme_default
+        # theme_light() +
+        # theme(text=element_text(color="black",
+        #                         size=10),
+        #       strip.background=element_blank(),
+        #       strip.text=element_text(color="black"),
+        #       legend.position="none",
+        #       axis.text=element_text(color="black"),
+        #       axis.title=element_text(size=10),
+        #       axis.title.y=element_text(angle=0, vjust=0.5),
+        #       panel.grid=element_blank())
 
     ggsave(output_volcano,
            plot=volcano,
            width=16,
            height=9,
-           units="cm")
+           units="cm",
+           device=cairo_pdf)
 
     maplot = ggplot() +
         geom_hline(yintercept=0,
                    color="grey80") +
-        geom_point(data = df,
+        geom_point(data = df %>% filter(!(significant & chip_hit)),
                    aes(x=mean_expr,
                        y=log2_foldchange,
                        alpha=significant,
@@ -74,6 +88,16 @@ main = function(input_high_affinity,
                    # size=0.4,
                    size=1,
                    shape=16) +
+        geom_label(data = df %>% filter(significant & chip_hit),
+                   aes(x=mean_expr,
+                       y=log2_foldchange,
+                       label=name),
+                   family='FreeSans',
+                   size=5/72*25.4,
+                   label.size=NA,
+                   label.r=unit(0, 'pt'),
+                   label.padding=unit(0, 'pt'),
+                   alpha=0.5) +
         facet_grid(.~strain) +
         scale_x_log10(#limits=c(0, NA),
                            #expand=c(0, 2),
@@ -91,14 +115,8 @@ main = function(input_high_affinity,
                                                              "]"))) +
         scale_alpha_manual(values=c(0.2, 0.6)) +
         scale_color_manual(values=c("grey40", "#440154FF")) +
-        theme_light() +
-        theme(text=element_text(color="black",
-                                size=10),
-              strip.background=element_blank(),
-              strip.text=element_text(color="black"),
-              legend.position="none",
-              axis.text=element_text(color="black"),
-              axis.title=element_text(size=10),
+        theme_default +
+        theme(legend.position="none",
               axis.title.y=element_text(angle=0, vjust=0.5),
               panel.grid=element_blank())
 
@@ -106,7 +124,8 @@ main = function(input_high_affinity,
            plot=maplot,
            width=16,
            height=7,
-           units="cm")
+           units="cm",
+           device=cairo_pdf)
 
     # plot = ggplot() +
     #     geom_point(data = df %>%
@@ -201,18 +220,19 @@ main = function(input_high_affinity,
                  size=0.3,
                  arrow=arrow(type="closed",
                              length=unit(3, "pt"))) +
-        theme_light() +
-        theme(text=element_text(size=8, family="FreeSans"),
-              legend.position=c(0.5,0.75),
-              axis.text.y=element_text(color="black", size=8),
-              axis.text.x=element_blank(),
-              axis.ticks.x=element_blank(),
-              axis.title=element_text(size=8),
-              axis.title.y=element_text(angle=0,
-                                        vjust=0.5),
-              legend.text=element_text(size=8),
-              legend.spacing.x=unit(-2, "pt"),
-              panel.grid=element_blank())
+        theme_default #+
+        # theme_light() +
+        # theme(text=element_text(size=8, family="FreeSans"),
+        #       legend.position=c(0.5,0.75),
+        #       axis.text.y=element_text(color="black", size=8),
+        #       axis.text.x=element_blank(),
+        #       axis.ticks.x=element_blank(),
+        #       axis.title=element_text(size=8),
+        #       axis.title.y=element_text(angle=0,
+        #                                 vjust=0.5),
+        #       legend.text=element_text(size=8),
+        #       legend.spacing.x=unit(-2, "pt"),
+        #       panel.grid=element_blank())
 
     ggsave(output_summary,
            plot=summary_plot,
@@ -222,7 +242,8 @@ main = function(input_high_affinity,
            device=cairo_pdf)
 }
 
-main(input_high_affinity=snakemake@input[["high_affinity"]],
+main(theme_path=snakemake@input[["theme"]],
+     input_high_affinity=snakemake@input[["high_affinity"]],
      input_low_affinity=snakemake@input[["low_affinity"]],
      input_low_affinity_w_clamp=snakemake@input[["low_affinity_w_clamp"]],
      fdr=snakemake@params[["fdr"]],

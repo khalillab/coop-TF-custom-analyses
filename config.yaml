@@ -48,6 +48,14 @@ chipseq_coverage_ratio:
             - low-affinity-ZF-noVP16
             - low-affinity-ZF-with-clamp-noVP16
 
+chipseq_coverage_freescale_bysample:
+    chipseq-5:
+        coverage: ../chipseq-5/datavis/affinity-dependent-peaks/spikenorm/affinity-dependent-peaks-allsamples-allannotations-ZF-chipseq-spikenorm-protection.tsv.gz
+        peak_annotation: ../chipseq-5/datavis/affinity-dependent-peaks-filtered/spikenorm/all-v-all/passing/ratio/peaks_cluster-1.bed
+        transcripts: ../genome/annotations/Scer_transcripts_w_verifiedORFs-withVenus-URA3_reporter_strain.bed
+        orfs: ../genome/annotations/Scer_nondubious_ORFs-withVenus-URA3_reporter_strain.bed
+        motifs: ../zf_motif_enrichment/motifs/allmotifs.bed
+
 zf_venus_reporter_datavis:
     target_annotation: ../zf_data_integration/browser-shots/Venus/Venus.bed
     transcript_annotation: ../genome/annotations/Scer_transcripts_w_verifiedORFs-withVenus-URA3_reporter_strain.bed
@@ -126,3 +134,13 @@ rnaseq_13_6:
     low-affinity: ../rnaseq_zf_13_6/diff_exp/verified_genes_plus_Venus/low-affinity-13-6-v-reporter-only-13-6/libsizenorm/low-affinity-13-6-v-reporter-only-13-6_rnaseq-libsizenorm-verified_genes_plus_Venus-diffexp-results-all.tsv
     low-affinity-w-clamp: ../rnaseq_zf_13_6/diff_exp/verified_genes_plus_Venus/low-affinity-13-6-with-clamp-v-reporter-only-13-6/libsizenorm/low-affinity-13-6-with-clamp-v-reporter-only-13-6_rnaseq-libsizenorm-verified_genes_plus_Venus-diffexp-results-all.tsv
 
+chip_hits_no_vp16:
+    affinity_dependent_peaks: ../chipseq-5/diff_binding/ZF-cumulative-peaklist-spikenorm-noVP16/low-affinity-ZF-v-high-affinity-ZF/libsizenorm/low-affinity-ZF-v-high-affinity-ZF_ZF-chipseq-libsizenorm-ZF-cumulative-peaklist-spikenorm-noVP16-diffbind-results-all.tsv
+    chip_results:
+        high: ../chipseq-5/diff_binding/ZF-cumulative-peaklist-spikenorm-noVP16/high-affinity-ZF-noVP16-v-reporter-only/spikenorm/high-affinity-ZF-noVP16-v-reporter-only_ZF-chipseq-spikenorm-ZF-cumulative-peaklist-spikenorm-noVP16-diffbind-results-all.tsv
+        low: ../chipseq-5/diff_binding/ZF-cumulative-peaklist-spikenorm-noVP16/low-affinity-ZF-noVP16-v-reporter-only/spikenorm/low-affinity-ZF-noVP16-v-reporter-only_ZF-chipseq-spikenorm-ZF-cumulative-peaklist-spikenorm-noVP16-diffbind-results-all.tsv
+        low_clamp: ../chipseq-5/diff_binding/ZF-cumulative-peaklist-spikenorm-noVP16/low-affinity-ZF-with-clamp-noVP16-v-reporter-only/spikenorm/low-affinity-ZF-with-clamp-noVP16-v-reporter-only_ZF-chipseq-spikenorm-ZF-cumulative-peaklist-spikenorm-noVP16-diffbind-results-all.tsv
+
+chip_volcano_custom:
+    low_v_high: ../chipseq-5/diff_binding/peaks/low-affinity-ZF-v-high-affinity-ZF/libsizenorm/low-affinity-ZF-v-high-affinity-ZF_ZF-chipseq-libsizenorm-peaks-diffbind-results-all.tsv
+    low_clamp_v_high: ../chipseq-5/diff_binding/peaks/low-affinity-ZF-with-clamp-v-high-affinity-ZF/libsizenorm/low-affinity-ZF-with-clamp-v-high-affinity-ZF_ZF-chipseq-libsizenorm-peaks-diffbind-results-all.tsv

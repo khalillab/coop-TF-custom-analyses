@@ -25,6 +25,10 @@ rule target:
         "figures/rnaseq_summary/rnaseq_summary_13_6.pdf",
         "figures/rnaseq_volcano_custom_13_6.pdf",
         "figures/rnaseq_maplot_13_6.pdf",
+        'figures/chip_hits_w_rnaseq_info/chip_joined_no_vp16.tsv',
+        'figures/chip_hits_w_rnaseq_info/chip_hits_w_rnaseq_info_no_vp16.tsv',
+        "figures/chip_volcano_custom.pdf",
+        "figures/zf_chipseq_coverage_motifs_bysample/zf_chipseq_coverage-affinity-dependent-peaks-{dataset}-freescale-bysample.pdf"
 
 rule register_fonts:
     input:
@@ -38,10 +42,11 @@ rule register_fonts:
 
 rule rnaseq_figures:
     input:
+        theme = config["theme_path"],
+        fonts = ".fonts_registered.txt",
         high_affinity = config["rnaseq"]["high-affinity"],
         low_affinity = config["rnaseq"]["low-affinity"],
         low_affinity_w_clamp = config["rnaseq"]["low-affinity-w-clamp"],
-        fonts = ".fonts_registered.txt"
     output:
         volcano = "figures/rnaseq_volcano.pdf",
         maplot = "figures/rnaseq_maplot.pdf",
@@ -101,6 +106,23 @@ rule chipseq_coverage_ratio_freescale:
     script:
         "scripts/chipseq_coverage_ratio_motifs_freescale.R"
 
+rule chipseq_coverage_freescale_bysample:
+    input:
+        fonts = ".fonts_registered.txt",
+        coverage = lambda wc: config["chipseq_coverage_freescale_bysample"][wc.dataset]["coverage"],
+        summit_annotation = lambda wc: config["chipseq_coverage_freescale_bysample"][wc.dataset]["peak_annotation"],
+        transcript_annotation = lambda wc: config["chipseq_coverage_freescale_bysample"][wc.dataset]["transcripts"],
+        orf_annotation = lambda wc: config["chipseq_coverage_freescale_bysample"][wc.dataset]["orfs"],
+        motif_annotation = lambda wc: config["chipseq_coverage_freescale_bysample"][wc.dataset]["motifs"],
+    output:
+        coverage = "figures/zf_chipseq_coverage_motifs_bysample/zf_chipseq_coverage-affinity-dependent-peaks-{dataset}-freescale-bysample.pdf"
+    params:
+        # filter_groups = lambda wc: config["chipseq_coverage_ratio"][wc.dataset]["filter_groups"],
+    conda:
+        "envs/plot.yaml"
+    script:
+        "scripts/chipseq_coverage_motifs_freescale_bysample.R"
+
 rule zf_venus_reporter_datavis:
     input:
         theme = config["theme_path"],
@@ -127,6 +149,8 @@ rule rnaseq_summary:
         motif_results = config["rnaseq_summary"]["motif_results"],
     output:
         pdf = "figures/rnaseq_summary/rnaseq_summary.pdf",
+        data_tsv = "figures/rnaseq_summary/rnaseq_summary_data.tsv",
+        motif_genes = "figures/rnaseq_summary/rnaseq_summary_motif_genes.tsv",
     params:
         fdr = config["rnaseq_summary"]["rnaseq_fdr"],
     conda:
@@ -378,3 +402,52 @@ rule rnaseq_figures_13_6:
         fdr = config["rnaseq"]["fdr"]
     script:
         "scripts/rnaseq_figures.R"
+
+rule join_chip_noVP16:
+    input:
+        affinity_dependent = config['chip_hits_no_vp16']['affinity_dependent_peaks'],
+        high = config['chip_hits_no_vp16']['chip_results']['high'],
+        low = config['chip_hits_no_vp16']['chip_results']['low'],
+        low_clamp = config['chip_hits_no_vp16']['chip_results']['low_clamp'],
+    output:
+        tsv = 'figures/chip_hits_w_rnaseq_info/chip_joined_no_vp16.tsv'
+    conda:
+        "envs/plot.yaml"
+    script:
+        "scripts/join_chip.R"
+
+rule chip_hits_w_rnaseq_info_noVP16:
+    input:
+        chip = 'figures/chip_hits_w_rnaseq_info/chip_joined_no_vp16.tsv',
+        rna = 'figures/chip_hits_w_rnaseq_info/rna_joined.tsv'
+    output:
+        'figures/chip_hits_w_rnaseq_info/chip_hits_w_rnaseq_info_no_vp16.tsv'
+    shell: """
+        bedtools closest \
+            -a <(tail -n +2 {input.chip} | \
+                 awk 'BEGIN{{OFS="\t"}} {{print $0, NR}}' | \
+                 sort -k1,1 -k2,2n) \
+            -b <(tail -n +2 {input.rna} | \
+                 sort -k1,1 -k2,2n) \
+            -k 2 | \
+        sort -k8,8n | \
+        cut -f8 --complement | \
+        cat <(paste <(head -n 1 {input.chip}) <(head -n 1 {input.rna})) - > \
+        {output}
+        """
+
+rule chip_volcano_custom:
+    input:
+        theme = config["theme_path"],
+        low_v_high = config["chip_volcano_custom"]["low_v_high"],
+        low_clamp_v_high = config["chip_volcano_custom"]["low_clamp_v_high"],
+        fonts = ".fonts_registered.txt"
+    output:
+        volcano = "figures/chip_volcano_custom.pdf",
+    conda:
+        "envs/plot.yaml"
+    params:
+        fdr = 0.1
+    script:
+        "scripts/chip_volcano_custom.R"
+
