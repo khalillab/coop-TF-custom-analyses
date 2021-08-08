@@ -285,6 +285,7 @@ rule rnaseq_summary_mutants_all:
         high_affinity_zftf_mutant = config["rnaseq_summary_mutants"]["high_affinity_zftf_mutant"],
     output:
         pdf = "figures/rnaseq_summary/rnaseq_summary_mutants_all.pdf",
+        data_tsv = "figures/rnaseq_summary/rnaseq_summary_mutants_all_data.tsv",
     params:
         fdr = config["rnaseq_summary"]["rnaseq_fdr"],
     conda:

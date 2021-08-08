@@ -16,6 +16,7 @@ main = function(theme_path = "custom_theme.R",
                 # panel_letter = "A",
                 fig_width = 17.4,
                 fig_height= 6,
+                data_tsv_out='test.tsv',
                 pdf_out="test.pdf"){
 
     source(theme_path)
@@ -26,7 +27,7 @@ main = function(theme_path = "custom_theme.R",
     #     filter(motif_start >= 0) %>%
     #     pull(region_id) %>%
     #     unique()
-    # 
+    #
     # chip_hits = c("VRP1",
     #               "Venus",
     #               "PHO8",
@@ -60,6 +61,7 @@ main = function(theme_path = "custom_theme.R",
         mutate(name = ordered(name, levels=gene_order))#,
                # motif_hit = name %in% motif_hits,
                # chip_hit = name %in% chip_hits)
+    df %>% write_tsv(data_tsv_out)
 
     reporter_coord_x = df %>%
         filter(name=="Venus") %>%
@@ -186,4 +188,5 @@ main(theme_path = snakemake@input[["theme"]], input_high_affinity=snakemake@inpu
      # panel_letter=snakemake@params[["panel_letter"]],
      # fig_width=snakemake@params[["fig_width"]],
      # fig_height=snakemake@params[["fig_height"]],
+     data_tsv_out=snakemake@output[["data_tsv"]],
      pdf_out= snakemake@output[["pdf"]])
