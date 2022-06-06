@@ -56,12 +56,12 @@ chipseq_coverage_freescale_bysample:
         orfs: ../genome/annotations/Scer_nondubious_ORFs-withVenus-URA3_reporter_strain.bed
         motifs: ../zf_motif_enrichment/motifs/allmotifs.bed
 
-zf_venus_reporter_datavis:
-    target_annotation: ../zf_data_integration/browser-shots/Venus/Venus.bed
-    transcript_annotation: ../genome/annotations/Scer_transcripts_w_verifiedORFs-withVenus-URA3_reporter_strain.bed
-    orf_annotation: ../genome/annotations/Scer_nondubious_ORFs-withVenus-URA3_reporter_strain.bed
-    motif_annotation: ../genome/annotations/42-10_9bp_fimo_7e4.bed
-    data: ../zf_data_integration/browser-shots/Venus/Venus_all-assays.tsv.gz
+# zf_venus_reporter_datavis:
+#     target_annotation: ../zf_data_integration/browser-shots/Venus/Venus.bed
+#     transcript_annotation: ../genome/annotations/Scer_transcripts_w_verifiedORFs-withVenus-URA3_reporter_strain.bed
+#     orf_annotation: ../genome/annotations/Scer_nondubious_ORFs-withVenus-URA3_reporter_strain.bed
+#     motif_annotation: ../genome/annotations/42-10_9bp_fimo_7e4.bed
+#     data: ../zf_data_integration/browser-shots/Venus/Venus_all-assays.tsv.gz
 
 rnaseq_summary:
     rnaseq_fdr: 0.1
