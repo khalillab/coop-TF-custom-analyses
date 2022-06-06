@@ -9,26 +9,26 @@ rule target:
         expand("figures/zf_chipseq_coverage/zf_chipseq_coverage-affinity-dependent-peaks-{dataset}.pdf", dataset=config['chipseq_coverage']),
         expand("figures/zf_chipseq_coverage_ratio_motifs/zf_chipseq_coverage-ratio-affinity-dependent-peaks-{dataset}.pdf", dataset=config['chipseq_coverage_ratio']),
         expand("figures/zf_chipseq_coverage_ratio_motifs/zf_chipseq_coverage-ratio-affinity-dependent-peaks-{dataset}-freescale.pdf", dataset=config['chipseq_coverage_ratio']),
-        "figures/zf_venus_reporter_datavis.pdf",
+        # "figures/zf_venus_reporter_datavis.pdf",
         "figures/rnaseq_summary/rnaseq_summary.pdf",
         "figures/rnaseq_summary_alternate/rnaseq_summary_scatter_highlight_motifs.pdf",
-        "figures/zf_chipseq_global_coverage/zf_chipseq_global_coverage.pdf",
-        "figures/expression_vs_chip_enrichment/expression_vs_chip_enrichment.pdf",
+        # "figures/zf_chipseq_global_coverage/zf_chipseq_global_coverage.pdf",
+        # "figures/expression_vs_chip_enrichment/expression_vs_chip_enrichment.pdf",
         "figures/motif_distance_vs_rnaseq/motif_distance_vs_rnaseq.pdf",
-        "figures/rna_vs_chip_windows/rna_vs_chip_windows.pdf",
-        expand("figures/chipseq_global_abundance/chipseq_global_abundance_{dataset}.pdf", dataset=config["chipseq_global_abundance"]),
+        # "figures/rna_vs_chip_windows/rna_vs_chip_windows.pdf",
+        # expand("figures/chipseq_global_abundance/chipseq_global_abundance_{dataset}.pdf", dataset=config["chipseq_global_abundance"]),
         expand("figures/reporter_chipseq_qc/reporter_chipseq_qc_{dataset}.pdf", dataset=config['reporter_chipseq_qc']),
         "figures/rnaseq_summary/rnaseq_summary_mutants.pdf",
         "figures/rnaseq_summary/rnaseq_summary_mutants_all.pdf",
         'figures/chip_hits_w_rnaseq_info/chip_joined.tsv',
         "figures/rnaseq_volcano_custom.pdf",
-        "figures/rnaseq_summary/rnaseq_summary_13_6.pdf",
-        "figures/rnaseq_volcano_custom_13_6.pdf",
-        "figures/rnaseq_maplot_13_6.pdf",
+        # "figures/rnaseq_summary/rnaseq_summary_13_6.pdf",
+        # "figures/rnaseq_volcano_custom_13_6.pdf",
+        # "figures/rnaseq_maplot_13_6.pdf",
         'figures/chip_hits_w_rnaseq_info/chip_joined_no_vp16.tsv',
         'figures/chip_hits_w_rnaseq_info/chip_hits_w_rnaseq_info_no_vp16.tsv',
         "figures/chip_volcano_custom.pdf",
-        "figures/zf_chipseq_coverage_motifs_bysample/zf_chipseq_coverage-affinity-dependent-peaks-{dataset}-freescale-bysample.pdf"
+        expand("figures/zf_chipseq_coverage_motifs_bysample/zf_chipseq_coverage-affinity-dependent-peaks-{dataset}-freescale-bysample.pdf", dataset=config["chipseq_coverage_freescale_bysample"])
 
 rule register_fonts:
     input:
@@ -123,21 +123,21 @@ rule chipseq_coverage_freescale_bysample:
     script:
         "scripts/chipseq_coverage_motifs_freescale_bysample.R"
 
-rule zf_venus_reporter_datavis:
-    input:
-        theme = config["theme_path"],
-        fonts = ".fonts_registered.txt",
-        target_annotation = config["zf_venus_reporter_datavis"]["target_annotation"],
-        transcript_annotation = config["zf_venus_reporter_datavis"]["transcript_annotation"],
-        orf_annotation = config["zf_venus_reporter_datavis"]["orf_annotation"],
-        motif_annotation = config["zf_venus_reporter_datavis"]["motif_annotation"],
-        data = config["zf_venus_reporter_datavis"]["data"],
-    output:
-        plot = "figures/zf_venus_reporter_datavis.pdf"
-    conda:
-        "envs/plot.yaml"
-    script:
-        "scripts/zf_venus_reporter_datavis.R"
+# rule zf_venus_reporter_datavis:
+#     input:
+#         theme = config["theme_path"],
+#         fonts = ".fonts_registered.txt",
+#         target_annotation = config["zf_venus_reporter_datavis"]["target_annotation"],
+#         transcript_annotation = config["zf_venus_reporter_datavis"]["transcript_annotation"],
+#         orf_annotation = config["zf_venus_reporter_datavis"]["orf_annotation"],
+#         motif_annotation = config["zf_venus_reporter_datavis"]["motif_annotation"],
+#         data = config["zf_venus_reporter_datavis"]["data"],
+#     output:
+#         plot = "figures/zf_venus_reporter_datavis.pdf"
+#     conda:
+#         "envs/plot.yaml"
+#     script:
+#         "scripts/zf_venus_reporter_datavis.R"
 
 rule rnaseq_summary:
     input:
@@ -177,34 +177,34 @@ rule rnaseq_summary_alternate:
         "scripts/rnaseq_summary_alternate.R"
 
 
-rule zf_chipseq_global_coverage:
-    input:
-        theme = config["theme_path"],
-        fonts = ".fonts_registered.txt",
-        data = config["zf_chipseq_global_coverage"]["data"],
-    output:
-        pdf = "figures/zf_chipseq_global_coverage/zf_chipseq_global_coverage.pdf",
-    conda:
-        "envs/plot.yaml"
-    script:
-        "scripts/zf_chipseq_global_coverage.R"
+# rule zf_chipseq_global_coverage:
+#     input:
+#         theme = config["theme_path"],
+#         fonts = ".fonts_registered.txt",
+#         data = config["zf_chipseq_global_coverage"]["data"],
+#     output:
+#         pdf = "figures/zf_chipseq_global_coverage/zf_chipseq_global_coverage.pdf",
+#     conda:
+#         "envs/plot.yaml"
+#     script:
+#         "scripts/zf_chipseq_global_coverage.R"
 
-rule expression_vs_chip_enrichment:
-    input:
-        theme = config["theme_path"],
-        fonts = ".fonts_registered.txt",
-        high_rna = config["expression_vs_chip_enrichment"]["high_rna"],
-        high_chip = config["expression_vs_chip_enrichment"]["high_chip"],
-        low_rna = config["expression_vs_chip_enrichment"]["low_rna"],
-        low_chip = config["expression_vs_chip_enrichment"]["low_chip"],
-        clamp_rna = config["expression_vs_chip_enrichment"]["clamp_rna"],
-        clamp_chip = config["expression_vs_chip_enrichment"]["clamp_chip"],
-    output:
-        pdf = "figures/expression_vs_chip_enrichment/expression_vs_chip_enrichment.pdf",
-    conda:
-        "envs/plot.yaml"
-    script:
-        "scripts/expression_vs_chip_enrichment.R"
+# rule expression_vs_chip_enrichment:
+#     input:
+#         theme = config["theme_path"],
+#         fonts = ".fonts_registered.txt",
+#         high_rna = config["expression_vs_chip_enrichment"]["high_rna"],
+#         high_chip = config["expression_vs_chip_enrichment"]["high_chip"],
+#         low_rna = config["expression_vs_chip_enrichment"]["low_rna"],
+#         low_chip = config["expression_vs_chip_enrichment"]["low_chip"],
+#         clamp_rna = config["expression_vs_chip_enrichment"]["clamp_rna"],
+#         clamp_chip = config["expression_vs_chip_enrichment"]["clamp_chip"],
+#     output:
+#         pdf = "figures/expression_vs_chip_enrichment/expression_vs_chip_enrichment.pdf",
+#     conda:
+#         "envs/plot.yaml"
+#     script:
+#         "scripts/expression_vs_chip_enrichment.R"
 
 rule motif_distance_vs_rnaseq:
     input:
@@ -219,18 +219,18 @@ rule motif_distance_vs_rnaseq:
     script:
         "scripts/motif_distance_vs_rnaseq.R"
 
-rule rna_vs_chip_windows:
-    input:
-        theme = config["theme_path"],
-        fonts = ".fonts_registered.txt",
-        rna = config["rna_vs_chip_windows"]["rna"],
-        chip = config["rna_vs_chip_windows"]["chip"],
-    output:
-        pdf = "figures/rna_vs_chip_windows/rna_vs_chip_windows.pdf",
-    conda:
-        "envs/plot.yaml"
-    script:
-        "scripts/rna_vs_chip_windows.R"
+# rule rna_vs_chip_windows:
+#     input:
+#         theme = config["theme_path"],
+#         fonts = ".fonts_registered.txt",
+#         rna = config["rna_vs_chip_windows"]["rna"],
+#         chip = config["rna_vs_chip_windows"]["chip"],
+#     output:
+#         pdf = "figures/rna_vs_chip_windows/rna_vs_chip_windows.pdf",
+#     conda:
+#         "envs/plot.yaml"
+#     script:
+#         "scripts/rna_vs_chip_windows.R"
 
 rule chipseq_global_abundance:
     input:
@@ -354,55 +354,55 @@ rule rnaseq_volcano_custom:
     script:
         "scripts/rnaseq_volcano_custom.R"
 
-rule rnaseq_summary_13_6:
-    input:
-        theme = config["theme_path"],
-        fonts = ".fonts_registered.txt",
-        high_affinity = config["rnaseq_summary_13_6"]["high-affinity"],
-        low_affinity = config["rnaseq_summary_13_6"]["low-affinity"],
-        low_affinity_w_clamp = config["rnaseq_summary_13_6"]["low-affinity-w-clamp"],
-        # motif_results = config["rnaseq_summary"]["motif_results"],
-    output:
-        pdf = "figures/rnaseq_summary/rnaseq_summary_13_6.pdf",
-    params:
-        fdr = config["rnaseq_summary"]["rnaseq_fdr"],
-    conda:
-        "envs/ggforce.yaml"
-    script:
-        "scripts/rnaseq_summary_13-6.R"
+# rule rnaseq_summary_13_6:
+#     input:
+#         theme = config["theme_path"],
+#         fonts = ".fonts_registered.txt",
+#         high_affinity = config["rnaseq_summary_13_6"]["high-affinity"],
+#         low_affinity = config["rnaseq_summary_13_6"]["low-affinity"],
+#         low_affinity_w_clamp = config["rnaseq_summary_13_6"]["low-affinity-w-clamp"],
+#         # motif_results = config["rnaseq_summary"]["motif_results"],
+#     output:
+#         pdf = "figures/rnaseq_summary/rnaseq_summary_13_6.pdf",
+#     params:
+#         fdr = config["rnaseq_summary"]["rnaseq_fdr"],
+#     conda:
+#         "envs/ggforce.yaml"
+#     script:
+#         "scripts/rnaseq_summary_13-6.R"
 
-rule rnaseq_volcano_custom_13_6:
-    input:
-        theme = config["theme_path"],
-        low_v_high = config["rnaseq_volcano_custom_13_6"]["low_v_high"],
-        low_clamp_v_high = config["rnaseq_volcano_custom_13_6"]["low_clamp_v_high"],
-        low_clamp_v_low = config["rnaseq_volcano_custom_13_6"]["low_clamp_v_low"],
-        fonts = ".fonts_registered.txt"
-    output:
-        volcano = "figures/rnaseq_volcano_custom_13_6.pdf",
-    conda:
-        "envs/plot.yaml"
-    params:
-        fdr = config["rnaseq"]["fdr"]
-    script:
-        "scripts/rnaseq_volcano_custom.R"
+# rule rnaseq_volcano_custom_13_6:
+#     input:
+#         theme = config["theme_path"],
+#         low_v_high = config["rnaseq_volcano_custom_13_6"]["low_v_high"],
+#         low_clamp_v_high = config["rnaseq_volcano_custom_13_6"]["low_clamp_v_high"],
+#         low_clamp_v_low = config["rnaseq_volcano_custom_13_6"]["low_clamp_v_low"],
+#         fonts = ".fonts_registered.txt"
+#     output:
+#         volcano = "figures/rnaseq_volcano_custom_13_6.pdf",
+#     conda:
+#         "envs/plot.yaml"
+#     params:
+#         fdr = config["rnaseq"]["fdr"]
+#     script:
+#         "scripts/rnaseq_volcano_custom.R"
 
-rule rnaseq_figures_13_6:
-    input:
-        high_affinity = config["rnaseq_13_6"]["high-affinity"],
-        low_affinity = config["rnaseq_13_6"]["low-affinity"],
-        low_affinity_w_clamp = config["rnaseq_13_6"]["low-affinity-w-clamp"],
-        fonts = ".fonts_registered.txt"
-    output:
-        volcano = "figures/rnaseq_volcano_13_6.pdf",
-        maplot = "figures/rnaseq_maplot_13_6.pdf",
-        summary = "figures/rnaseq_summary_13_6.pdf",
-    conda:
-        "envs/plot.yaml"
-    params:
-        fdr = config["rnaseq"]["fdr"]
-    script:
-        "scripts/rnaseq_figures.R"
+# rule rnaseq_figures_13_6:
+#     input:
+#         high_affinity = config["rnaseq_13_6"]["high-affinity"],
+#         low_affinity = config["rnaseq_13_6"]["low-affinity"],
+#         low_affinity_w_clamp = config["rnaseq_13_6"]["low-affinity-w-clamp"],
+#         fonts = ".fonts_registered.txt"
+#     output:
+#         volcano = "figures/rnaseq_volcano_13_6.pdf",
+#         maplot = "figures/rnaseq_maplot_13_6.pdf",
+#         summary = "figures/rnaseq_summary_13_6.pdf",
+#     conda:
+#         "envs/plot.yaml"
+#     params:
+#         fdr = config["rnaseq"]["fdr"]
+#     script:
+#         "scripts/rnaseq_figures.R"
 
 rule join_chip_noVP16:
     input:
