@@ -10,11 +10,11 @@ rnaseq:
     low-affinity-w-clamp: ../rnaseq/diff_exp/verified_genes_plus_Venus/low-affinity-ZF-with-clamp-v-reporter-only/libsizenorm/low-affinity-ZF-with-clamp-v-reporter-only_rnaseq-libsizenorm-verified_genes_plus_Venus-diffexp-results-all.tsv
 
 chipseq_coverage:
-    chipseq-3:
-        coverage: ../chipseq-3/datavis/affinity-dependent-peaks/libsizenorm/affinity-dependent-peaks-allsamples-allannotations-ZF-chipseq-libsizenorm-protection.tsv.gz
-        peak_annotation: ../chipseq-3/datavis/affinity-dependent-peaks/libsizenorm/all-v-all/passing/ratio/peaks_cluster-1.bed
-        transcripts: ../genome/annotations/Scer_transcripts_w_verifiedORFs-withVenus-URA3_reporter_strain.bed
-        orfs: ../genome/annotations/Scer_nondubious_ORFs-withVenus-URA3_reporter_strain.bed
+    # chipseq-3:
+    #     coverage: ../chipseq-3/datavis/affinity-dependent-peaks/libsizenorm/affinity-dependent-peaks-allsamples-allannotations-ZF-chipseq-libsizenorm-protection.tsv.gz
+    #     peak_annotation: ../chipseq-3/datavis/affinity-dependent-peaks/libsizenorm/all-v-all/passing/ratio/peaks_cluster-1.bed
+    #     transcripts: ../genome/annotations/Scer_transcripts_w_verifiedORFs-withVenus-URA3_reporter_strain.bed
+    #     orfs: ../genome/annotations/Scer_nondubious_ORFs-withVenus-URA3_reporter_strain.bed
     chipseq-5-withVP16:
         coverage: ../chipseq-5/datavis/affinity-dependent-peaks/spikenorm/affinity-dependent-peaks-allsamples-allannotations-ZF-chipseq-spikenorm-protection.tsv.gz
         peak_annotation: ../chipseq-5/datavis/affinity-dependent-peaks/spikenorm/all-v-all/passing/protection/peaks_cluster-1.bed
@@ -70,32 +70,32 @@ rnaseq_summary:
     low-affinity: ../rnaseq/diff_exp/verified_genes_plus_Venus/low-affinity-ZF-v-reporter-only/libsizenorm/low-affinity-ZF-v-reporter-only_rnaseq-libsizenorm-verified_genes_plus_Venus-diffexp-results-all.tsv
     low-affinity-w-clamp: ../rnaseq/diff_exp/verified_genes_plus_Venus/low-affinity-ZF-with-clamp-v-reporter-only/libsizenorm/low-affinity-ZF-with-clamp-v-reporter-only_rnaseq-libsizenorm-verified_genes_plus_Venus-diffexp-results-all.tsv
 
-zf_chipseq_global_coverage:
-    data: ../chipseq-3/qual_ctrl/scatter_plots/ZF_chipseq_union-bedgraph-libsizenorm-midpoint-window-500-allsamples.tsv.gz
+# zf_chipseq_global_coverage:
+#     data: ../chipseq-3/qual_ctrl/scatter_plots/ZF_chipseq_union-bedgraph-libsizenorm-midpoint-window-500-allsamples.tsv.gz
 
-expression_vs_chip_enrichment:
-    high_rna: ../rnaseq/diff_exp/verified_genes_plus_Venus/high-affinity-ZF-v-reporter-only/libsizenorm/high-affinity-ZF-v-reporter-only_rnaseq-libsizenorm-verified_genes_plus_Venus-diffexp-results-all.tsv
-    high_chip: ../chipseq-3/diff_binding/verified_genes_plus_Venus/high-affinity-ZF-v-reporter-only/libsizenorm/high-affinity-ZF-v-reporter-only_ZF-chipseq-libsizenorm-verified_genes_plus_Venus-diffbind-results-all.tsv
-    low_rna: ../rnaseq/diff_exp/verified_genes_plus_Venus/low-affinity-ZF-v-reporter-only/libsizenorm/low-affinity-ZF-v-reporter-only_rnaseq-libsizenorm-verified_genes_plus_Venus-diffexp-results-all.tsv
-    low_chip: ../chipseq-3/diff_binding/verified_genes_plus_Venus/low-affinity-ZF-v-reporter-only/libsizenorm/low-affinity-ZF-v-reporter-only_ZF-chipseq-libsizenorm-verified_genes_plus_Venus-diffbind-results-all.tsv
-    clamp_rna: ../rnaseq/diff_exp/verified_genes_plus_Venus/low-affinity-ZF-with-clamp-v-reporter-only/libsizenorm/low-affinity-ZF-with-clamp-v-reporter-only_rnaseq-libsizenorm-verified_genes_plus_Venus-diffexp-results-all.tsv
-    clamp_chip: ../chipseq-3/diff_binding/verified_genes_plus_Venus/low-affinity-ZF-with-clamp-v-reporter-only/libsizenorm/low-affinity-ZF-with-clamp-v-reporter-only_ZF-chipseq-libsizenorm-verified_genes_plus_Venus-diffbind-results-all.tsv
+# expression_vs_chip_enrichment:
+#     high_rna: ../rnaseq/diff_exp/verified_genes_plus_Venus/high-affinity-ZF-v-reporter-only/libsizenorm/high-affinity-ZF-v-reporter-only_rnaseq-libsizenorm-verified_genes_plus_Venus-diffexp-results-all.tsv
+#     high_chip: ../chipseq-3/diff_binding/verified_genes_plus_Venus/high-affinity-ZF-v-reporter-only/libsizenorm/high-affinity-ZF-v-reporter-only_ZF-chipseq-libsizenorm-verified_genes_plus_Venus-diffbind-results-all.tsv
+#     low_rna: ../rnaseq/diff_exp/verified_genes_plus_Venus/low-affinity-ZF-v-reporter-only/libsizenorm/low-affinity-ZF-v-reporter-only_rnaseq-libsizenorm-verified_genes_plus_Venus-diffexp-results-all.tsv
+#     low_chip: ../chipseq-3/diff_binding/verified_genes_plus_Venus/low-affinity-ZF-v-reporter-only/libsizenorm/low-affinity-ZF-v-reporter-only_ZF-chipseq-libsizenorm-verified_genes_plus_Venus-diffbind-results-all.tsv
+#     clamp_rna: ../rnaseq/diff_exp/verified_genes_plus_Venus/low-affinity-ZF-with-clamp-v-reporter-only/libsizenorm/low-affinity-ZF-with-clamp-v-reporter-only_rnaseq-libsizenorm-verified_genes_plus_Venus-diffexp-results-all.tsv
+#     clamp_chip: ../chipseq-3/diff_binding/verified_genes_plus_Venus/low-affinity-ZF-with-clamp-v-reporter-only/libsizenorm/low-affinity-ZF-with-clamp-v-reporter-only_ZF-chipseq-libsizenorm-verified_genes_plus_Venus-diffbind-results-all.tsv
 
 motif_distance_vs_rnaseq:
     rnaseq: ../rnaseq/diff_exp/verified_genes_plus_Venus/high-affinity-ZF-v-reporter-only/libsizenorm/high-affinity-ZF-v-reporter-only_rnaseq-libsizenorm-verified_genes_plus_Venus-diffexp-results-all.tsv
     motifs: ../zf_motif_enrichment/comparisons/high-affinity-upregulated-transcripts-v-all-transcripts/high-affinity-upregulated-transcripts-v-all-transcripts_control_unmergedFIMOresults.tsv.gz
 
-rna_vs_chip_windows:
-    rna: ../rnaseq/diff_exp/verified_genes_plus_Venus/high-affinity-ZF-v-reporter-only/libsizenorm/high-affinity-ZF-v-reporter-only_rnaseq-libsizenorm-verified_genes_plus_Venus-diffexp-results-all.tsv
-    chip: ../chipseq-3/diff_binding/verified_genes_plus_Venus_upstream_windows/high-affinity-ZF-v-reporter-only/libsizenorm/high-affinity-ZF-v-reporter-only_ZF-chipseq-libsizenorm-verified_genes_plus_Venus_upstream_windows-diffbind-results-all.tsv
+# rna_vs_chip_windows:
+#     rna: ../rnaseq/diff_exp/verified_genes_plus_Venus/high-affinity-ZF-v-reporter-only/libsizenorm/high-affinity-ZF-v-reporter-only_rnaseq-libsizenorm-verified_genes_plus_Venus-diffexp-results-all.tsv
+#     chip: ../chipseq-3/diff_binding/verified_genes_plus_Venus_upstream_windows/high-affinity-ZF-v-reporter-only/libsizenorm/high-affinity-ZF-v-reporter-only_ZF-chipseq-libsizenorm-verified_genes_plus_Venus_upstream_windows-diffbind-results-all.tsv
 
 chipseq_global_abundance:
-    chipseq-4-qc: ../chipseq-4/qual_ctrl/spikein/ZF-chipseq_spikein-counts.tsv
+    # chipseq-4-qc: ../chipseq-4/qual_ctrl/spikein/ZF-chipseq_spikein-counts.tsv
     chipseq-5: ../chipseq-5/qual_ctrl/spikein/ZF-chipseq_spikein-counts.tsv
 
 reporter_chipseq_qc:
-    chipseq-3: ../chipseq-3/datavis/reporter-binding-site/libsizenorm/reporter-binding-site-allsamples-allannotations-ZF-chipseq-libsizenorm-protection.tsv.gz
-    chipseq-4-qc: ../chipseq-4/datavis/reporter-binding-site/spikenorm/reporter-binding-site-allsamples-allannotations-ZF-chipseq-spikenorm-protection.tsv.gz
+    # chipseq-3: ../chipseq-3/datavis/reporter-binding-site/libsizenorm/reporter-binding-site-allsamples-allannotations-ZF-chipseq-libsizenorm-protection.tsv.gz
+    # chipseq-4-qc: ../chipseq-4/datavis/reporter-binding-site/spikenorm/reporter-binding-site-allsamples-allannotations-ZF-chipseq-spikenorm-protection.tsv.gz
     chipseq-5: ../chipseq-5/datavis/reporter-binding-site/spikenorm/reporter-binding-site-allsamples-allannotations-ZF-chipseq-spikenorm-protection.tsv.gz
 
 rnaseq_summary_mutants:
@@ -119,20 +119,20 @@ rnaseq_volcano_custom:
     low_clamp_v_high: ../rnaseq/diff_exp/verified_genes_plus_Venus/low-affinity-ZF-with-clamp-v-high-affinity-ZF/libsizenorm/low-affinity-ZF-with-clamp-v-high-affinity-ZF_rnaseq-libsizenorm-verified_genes_plus_Venus-diffexp-results-all.tsv
     low_clamp_v_low: ../rnaseq/diff_exp/verified_genes_plus_Venus/low-affinity-ZF-with-clamp-v-low-affinity-ZF/libsizenorm/low-affinity-ZF-with-clamp-v-low-affinity-ZF_rnaseq-libsizenorm-verified_genes_plus_Venus-diffexp-results-all.tsv
 
-rnaseq_summary_13_6:
-    high-affinity: ../rnaseq_zf_13_6/diff_exp/verified_genes_plus_Venus/high-affinity-13-6-v-reporter-only-13-6/libsizenorm/high-affinity-13-6-v-reporter-only-13-6_rnaseq-libsizenorm-verified_genes_plus_Venus-diffexp-results-all.tsv
-    low-affinity: ../rnaseq_zf_13_6/diff_exp/verified_genes_plus_Venus/low-affinity-13-6-v-reporter-only-13-6/libsizenorm/low-affinity-13-6-v-reporter-only-13-6_rnaseq-libsizenorm-verified_genes_plus_Venus-diffexp-results-all.tsv
-    low-affinity-w-clamp: ../rnaseq_zf_13_6/diff_exp/verified_genes_plus_Venus/low-affinity-13-6-with-clamp-v-reporter-only-13-6/libsizenorm/low-affinity-13-6-with-clamp-v-reporter-only-13-6_rnaseq-libsizenorm-verified_genes_plus_Venus-diffexp-results-all.tsv
+# rnaseq_summary_13_6:
+#     high-affinity: ../rnaseq_zf_13_6/diff_exp/verified_genes_plus_Venus/high-affinity-13-6-v-reporter-only-13-6/libsizenorm/high-affinity-13-6-v-reporter-only-13-6_rnaseq-libsizenorm-verified_genes_plus_Venus-diffexp-results-all.tsv
+#     low-affinity: ../rnaseq_zf_13_6/diff_exp/verified_genes_plus_Venus/low-affinity-13-6-v-reporter-only-13-6/libsizenorm/low-affinity-13-6-v-reporter-only-13-6_rnaseq-libsizenorm-verified_genes_plus_Venus-diffexp-results-all.tsv
+#     low-affinity-w-clamp: ../rnaseq_zf_13_6/diff_exp/verified_genes_plus_Venus/low-affinity-13-6-with-clamp-v-reporter-only-13-6/libsizenorm/low-affinity-13-6-with-clamp-v-reporter-only-13-6_rnaseq-libsizenorm-verified_genes_plus_Venus-diffexp-results-all.tsv
 
-rnaseq_volcano_custom_13_6:
-    low_v_high: ../rnaseq_zf_13_6/diff_exp/verified_genes_plus_Venus/low-affinity-13-6-v-high-affinity-13-6/libsizenorm/low-affinity-13-6-v-high-affinity-13-6_rnaseq-libsizenorm-verified_genes_plus_Venus-diffexp-results-all.tsv
-    low_clamp_v_high: ../rnaseq_zf_13_6/diff_exp/verified_genes_plus_Venus/low-affinity-13-6-with-clamp-v-high-affinity-13-6/libsizenorm/low-affinity-13-6-with-clamp-v-high-affinity-13-6_rnaseq-libsizenorm-verified_genes_plus_Venus-diffexp-results-all.tsv
-    low_clamp_v_low: ../rnaseq_zf_13_6/diff_exp/verified_genes_plus_Venus/low-affinity-13-6-with-clamp-v-low-affinity-13-6/libsizenorm/low-affinity-13-6-with-clamp-v-low-affinity-13-6_rnaseq-libsizenorm-verified_genes_plus_Venus-diffexp-results-all.tsv
+# rnaseq_volcano_custom_13_6:
+#     low_v_high: ../rnaseq_zf_13_6/diff_exp/verified_genes_plus_Venus/low-affinity-13-6-v-high-affinity-13-6/libsizenorm/low-affinity-13-6-v-high-affinity-13-6_rnaseq-libsizenorm-verified_genes_plus_Venus-diffexp-results-all.tsv
+#     low_clamp_v_high: ../rnaseq_zf_13_6/diff_exp/verified_genes_plus_Venus/low-affinity-13-6-with-clamp-v-high-affinity-13-6/libsizenorm/low-affinity-13-6-with-clamp-v-high-affinity-13-6_rnaseq-libsizenorm-verified_genes_plus_Venus-diffexp-results-all.tsv
+#     low_clamp_v_low: ../rnaseq_zf_13_6/diff_exp/verified_genes_plus_Venus/low-affinity-13-6-with-clamp-v-low-affinity-13-6/libsizenorm/low-affinity-13-6-with-clamp-v-low-affinity-13-6_rnaseq-libsizenorm-verified_genes_plus_Venus-diffexp-results-all.tsv
 
-rnaseq_13_6:
-    high-affinity: ../rnaseq_zf_13_6/diff_exp/verified_genes_plus_Venus/high-affinity-13-6-v-reporter-only-13-6/libsizenorm/high-affinity-13-6-v-reporter-only-13-6_rnaseq-libsizenorm-verified_genes_plus_Venus-diffexp-results-all.tsv
-    low-affinity: ../rnaseq_zf_13_6/diff_exp/verified_genes_plus_Venus/low-affinity-13-6-v-reporter-only-13-6/libsizenorm/low-affinity-13-6-v-reporter-only-13-6_rnaseq-libsizenorm-verified_genes_plus_Venus-diffexp-results-all.tsv
-    low-affinity-w-clamp: ../rnaseq_zf_13_6/diff_exp/verified_genes_plus_Venus/low-affinity-13-6-with-clamp-v-reporter-only-13-6/libsizenorm/low-affinity-13-6-with-clamp-v-reporter-only-13-6_rnaseq-libsizenorm-verified_genes_plus_Venus-diffexp-results-all.tsv
+# rnaseq_13_6:
+#     high-affinity: ../rnaseq_zf_13_6/diff_exp/verified_genes_plus_Venus/high-affinity-13-6-v-reporter-only-13-6/libsizenorm/high-affinity-13-6-v-reporter-only-13-6_rnaseq-libsizenorm-verified_genes_plus_Venus-diffexp-results-all.tsv
+#     low-affinity: ../rnaseq_zf_13_6/diff_exp/verified_genes_plus_Venus/low-affinity-13-6-v-reporter-only-13-6/libsizenorm/low-affinity-13-6-v-reporter-only-13-6_rnaseq-libsizenorm-verified_genes_plus_Venus-diffexp-results-all.tsv
+#     low-affinity-w-clamp: ../rnaseq_zf_13_6/diff_exp/verified_genes_plus_Venus/low-affinity-13-6-with-clamp-v-reporter-only-13-6/libsizenorm/low-affinity-13-6-with-clamp-v-reporter-only-13-6_rnaseq-libsizenorm-verified_genes_plus_Venus-diffexp-results-all.tsv
 
 chip_hits_no_vp16:
     affinity_dependent_peaks: ../chipseq-5/diff_binding/ZF-cumulative-peaklist-spikenorm-noVP16/low-affinity-ZF-v-high-affinity-ZF/libsizenorm/low-affinity-ZF-v-high-affinity-ZF_ZF-chipseq-libsizenorm-ZF-cumulative-peaklist-spikenorm-noVP16-diffbind-results-all.tsv
